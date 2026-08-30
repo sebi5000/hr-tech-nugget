@@ -5,7 +5,7 @@
 
 export const SITE = {
 	name: 'HR Tech Nugget',
-	url: 'https://hr-tech-nugget.pages.dev',
+	url: 'https://hr-tech-nugget.org',
 	lang: 'de',
 	author: 'Sebastian Eßling',
 	authorInitials: 'SE',

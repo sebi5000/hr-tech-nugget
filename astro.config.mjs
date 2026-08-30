@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://hr-tech-nugget.pages.dev',
+	site: 'https://hr-tech-nugget.org',
 	output: 'static',
 	trailingSlash: 'always',
 	build: { format: 'directory' },

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hr-tech-nugget.pages.dev/sitemap-index.xml
+Sitemap: https://hr-tech-nugget.org/sitemap-index.xml

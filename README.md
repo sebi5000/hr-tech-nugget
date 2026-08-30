@@ -108,7 +108,7 @@ anpassen. Beide werden zur Build-Zeit in RSS, Sitemap und Canonicals eingebacken
 ### 5. Nach dem ersten Deploy prüfen
 
 ```bash
-curl -sI https://hr-tech-nugget.pages.dev/ | grep -i "content-security\|referrer"
+curl -sI https://hr-tech-nugget.org/ | grep -i "content-security\|referrer"
 ```
 
 Und einmal echt im Newsletter-Formular eintragen: Das beweist, dass die CSP den
