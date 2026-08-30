@@ -21,8 +21,9 @@ These are rules, not suggestions. Everything else is derivable from the code.
 5. **The word "Essay" never appears.** Posts are Nuggets. Use `nuggetCount()`
    for the German plural — "1 NUGGET", "2 NUGGETS".
 6. **No client-side JavaScript without an explicit decision.** The mobile nav is
-   a `<details>` disclosure for this reason. `dist/` must contain zero `<script>`
-   tags.
+   a `<details>` disclosure for this reason. The only `<script>` tags in `dist/`
+   are `application/ld+json` structured-data blocks, which browsers never
+   execute. Zero executable scripts.
 7. **No third-party runtime requests.** Fonts are self-hosted at build time by
    Astro's Fonts API. `grep -r googleapis dist/` must return nothing — a GDPR
    requirement, not a performance preference.
@@ -72,10 +73,12 @@ affected nuggets with `number:` in frontmatter.
 ## Before pushing
 
 ```bash
-pnpm build
-grep -r googleapis dist/                              # must be empty
-grep -ro "<script" dist --include="*.html" | wc -l    # must be 0
+pnpm verify
 ```
+
+That runs the build and then asserts: no Google font requests, fonts actually
+self-hosted, no executable scripts, drafts excluded from pages/RSS/sitemap/counts,
+a back link on every non-home page, and the CSP allowing the Buttondown POST.
 
 ## Development
 

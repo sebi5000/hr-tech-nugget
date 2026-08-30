@@ -39,30 +39,46 @@ Details und die Regeln des Projekts stehen in [AGENTS.md](AGENTS.md).
 
 ## Vor dem Livegang — offene Punkte
 
-Diese Dinge müssen erledigt sein, bevor die Seite öffentlich erreichbar ist.
+### 1. Den OWNER-Block ausfüllen
 
-### 1. Impressum und Datenschutz ausfüllen
+**Alles Persönliche steht an genau einer Stelle:** dem `OWNER`-Block in
+`src/config/site.ts`. Impressum, Datenschutzerklärung, die Über-mich-Seite, der
+Footer und das Newsletter-Formular lesen von dort — es gibt keinen zweiten Ort,
+den man vergessen kann.
 
-`src/pages/impressum.astro` und `src/pages/datenschutz.astro` enthalten
-Platzhalter in eckigen Klammern (Anschrift, E-Mail, USt-IdNr.). **Ein
-unvollständiges Impressum ist abmahnfähig.** Beide Seiten sind Vorlagen und
-ersetzen keine Rechtsberatung.
+```ts
+export const OWNER = {
+  buttondownUser: '', // aus deinem Buttondown-Dashboard
+  email: '',
+  linkedinUrl: '',
+  street: '',
+  postalCity: '',
+  country: 'Deutschland',
+  phone: '', // optional
+  vatId: '', // oder der Hinweis, dass sie entfällt
+};
+```
 
-### 2. Buttondown verbinden
+Solange ein Pflichtfeld leer ist:
 
-In `src/config/site.ts` `buttondownUser` von `PLACEHOLDER` auf deinen
-Newsletter-Namen setzen. Die exakte Action-URL aus dem Embed-Snippet im
-Buttondown-Dashboard übernehmen, nicht raten.
+- steht auf Impressum und Datenschutz ein Banner „NOCH NICHT
+  VERÖFFENTLICHUNGSREIF" mit der Liste der offenen Felder,
+- rendern die betroffenen Stellen sichtbar markierte Platzhalter,
+- ist das Newsletter-Formular **deaktiviert** statt E-Mail-Adressen ins Leere zu
+  schicken.
 
-**Double-Opt-in im Buttondown-Dashboard aktivieren** — die Datenschutzerklärung
-sagt zu, dass es aktiv ist.
+**Ein unvollständiges Impressum ist abmahnfähig.** Impressum und
+Datenschutzerklärung sind Vorlagen und ersetzen keine Rechtsberatung.
 
-### 3. Kontaktdaten
+### 2. Double-Opt-in bei Buttondown aktivieren
 
-In `src/config/site.ts`: `linkedinUrl` und `contactEmail`. Die About-Seite zeigt
-sonst weiter `[DEINE E-MAIL]` und `[LINKEDIN-URL]`.
+Das ist eine Einstellung im Buttondown-Dashboard, nicht im Code — und die
+Datenschutzerklärung sagt zu, dass es aktiv ist.
 
-### 4. Deployment auf Cloudflare Pages
+Die Action-URL des Formulars wird aus `buttondownUser` gebaut. Vergleiche sie
+einmal mit dem Embed-Snippet in deinem Dashboard.
+
+### 3. Deployment auf Cloudflare Pages
 
 ```bash
 gh repo create sebi5000/hr-tech-nugget --public --source . --push
@@ -71,25 +87,25 @@ gh repo create sebi5000/hr-tech-nugget --public --source . --push
 Dann im Cloudflare-Dashboard: **Workers & Pages → Create → Pages → Connect to
 Git**, Repo auswählen.
 
-| Einstellung | Wert |
-| --- | --- |
-| Build command | `pnpm build` |
-| Output directory | `dist` |
+| Einstellung          | Wert                       |
+| -------------------- | -------------------------- |
+| Build command        | `pnpm build`               |
+| Output directory     | `dist`                     |
 | Environment variable | `NODE_VERSION` = `22.12.0` |
 
 `NODE_VERSION` ist nicht optional — das Standard-Build-Image von Cloudflare ist
 älter als Astro 7 verlangt, und das ist der erste Fehler, in den du sonst läufst.
 
-Nur **einen** Deploy-Weg verwenden. Git-Integration *und* ein
+Nur **einen** Deploy-Weg verwenden. Git-Integration _und_ ein
 Wrangler-GitHub-Action gleichzeitig erzeugen doppelte Deployments, die um den
 Produktions-Branch konkurrieren.
 
-### 5. Eigene Domain (später)
+### 4. Eigene Domain (später)
 
 `site:` in `astro.config.mjs` und die Sitemap-URL in `public/robots.txt`
 anpassen. Beide werden zur Build-Zeit in RSS, Sitemap und Canonicals eingebacken.
 
-### 6. Nach dem ersten Deploy prüfen
+### 5. Nach dem ersten Deploy prüfen
 
 ```bash
 curl -sI https://hr-tech-nugget.pages.dev/ | grep -i "content-security\|referrer"

@@ -16,7 +16,10 @@ interface Props {
 const { caption, bars, n } = Astro.props;
 ---
 
-<figure class="figure" style={n !== undefined ? `--fig-n: '${String(n).padStart(2, '0')}'` : undefined}>
+<figure
+	class="figure"
+	style={n !== undefined ? `--fig-n: '${String(n).padStart(2, '0')}'` : undefined}
+>
 	<figcaption class:list={['caption', { manual: n !== undefined }]}>{caption}</figcaption>
 
 	<div class="bars">

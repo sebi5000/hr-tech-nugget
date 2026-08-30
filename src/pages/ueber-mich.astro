@@ -3,7 +3,7 @@ import Monogram from '@/components/Monogram.astro';
 import NewsletterBlock from '@/components/NewsletterBlock.astro';
 import SpecStrip from '@/components/SpecStrip.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { SITE, TOPICS, UI } from '@/config/site';
+import { OWNER, SITE, TOPICS, UI } from '@/config/site';
 ---
 
 <BaseLayout
@@ -24,8 +24,8 @@ import { SITE, TOPICS, UI } from '@/config/site';
 		<div class="intro">
 			<h1>{SITE.author}</h1>
 			<p>
-				Ich verantworte die IT für HR-Transformation bei {SITE.authorCompany}, einer Beratung für SAP
-				SuccessFactors. Hier schreibe ich auf, was in keine Projektpräsentation passt.
+				Ich verantworte die IT für HR-Transformation bei {SITE.authorCompany}, einer Beratung für
+				SAP SuccessFactors. Hier schreibe ich auf, was in keine Projektpräsentation passt.
 			</p>
 		</div>
 	</div>
@@ -45,10 +45,10 @@ import { SITE, TOPICS, UI } from '@/config/site';
 				irgendwo beim Organigramm stillschweigend hängen bleiben.
 			</p>
 			<p>
-				Ich schreibe das, weil das meiste über HR-Technologie von Leuten veröffentlicht wird, die sie
-				verkaufen. Ich verkaufe hier nichts. Manche dieser Nuggets sind Schlussfolgerungen; die
-				meisten sind eher lautes Nachdenken über etwas, das mir ein Projekt gerade auf die harte Tour
-				beigebracht hat.
+				Ich schreibe das, weil das meiste über HR-Technologie von Leuten veröffentlicht wird, die
+				sie verkaufen. Ich verkaufe hier nichts. Manche dieser Nuggets sind Schlussfolgerungen; die
+				meisten sind eher lautes Nachdenken über etwas, das mir ein Projekt gerade auf die harte
+				Tour beigebracht hat.
 			</p>
 			<p class="last">
 				Alles hier ist meine persönliche Sicht, nicht die meines Arbeitgebers. Wenn du mit denselben
@@ -94,8 +94,24 @@ import { SITE, TOPICS, UI } from '@/config/site';
 			<p>Ich lese alles &mdash; und antworte auf das meiste.</p>
 		</div>
 		<div class="buttons">
-			<a class="btn" href="mailto:[DEINE E-MAIL]">[DEINE E-MAIL]</a>
-			<a class="btn" href={SITE.linkedinUrl}>[LINKEDIN-URL] &#8599;</a>
+			{
+				OWNER.email ? (
+					<a class="btn" href={`mailto:${OWNER.email}`}>
+						{OWNER.email}
+					</a>
+				) : (
+					<span class="btn unset">[E-MAIL IN site.ts SETZEN]</span>
+				)
+			}
+			{
+				OWNER.linkedinUrl ? (
+					<a class="btn" href={OWNER.linkedinUrl} rel="me noopener">
+						LINKEDIN &#8599;
+					</a>
+				) : (
+					<span class="btn unset">[LINKEDIN-URL IN site.ts SETZEN]</span>
+				)
+			}
 		</div>
 	</div>
 
@@ -252,6 +268,17 @@ import { SITE, TOPICS, UI } from '@/config/site';
 		background: var(--ink);
 		color: var(--on-dark);
 		text-decoration: none;
+	}
+
+	.btn.unset {
+		border-style: dashed;
+		border-color: var(--accent);
+		color: var(--muted-strong);
+		cursor: default;
+	}
+	.btn.unset:hover {
+		background: none;
+		color: var(--muted-strong);
 	}
 
 	@media (max-width: 979px) {

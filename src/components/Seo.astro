@@ -7,12 +7,41 @@ interface Props {
 	/** Set on nugget pages so search engines see an article, not a page. */
 	type?: 'website' | 'article';
 	publishedTime?: Date | undefined;
+	modifiedTime?: Date | undefined;
 }
 
-const { title, description, type = 'website', publishedTime } = Astro.props;
+const { title, description, type = 'website', publishedTime, modifiedTime } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+const base = Astro.site ?? new URL(SITE.url);
+const canonical = new URL(Astro.url.pathname, base).href;
+const ogImage = new URL('/og.png', base).href;
 const fullTitle = title === SITE.name ? SITE.name : `${title} — ${SITE.name}`;
+
+const jsonLd =
+	type === 'article'
+		? {
+				'@context': 'https://schema.org',
+				'@type': 'BlogPosting',
+				headline: title,
+				description,
+				inLanguage: 'de-DE',
+				url: canonical,
+				image: ogImage,
+				datePublished: publishedTime?.toISOString(),
+				dateModified: (modifiedTime ?? publishedTime)?.toISOString(),
+				author: { '@type': 'Person', name: SITE.author },
+				publisher: { '@type': 'Person', name: SITE.author },
+				mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+			}
+		: {
+				'@context': 'https://schema.org',
+				'@type': 'Blog',
+				name: SITE.name,
+				description: SITE.description,
+				inLanguage: 'de-DE',
+				url: new URL('/', base).href,
+				author: { '@type': 'Person', name: SITE.author },
+			};
 ---
 
 <title>{fullTitle}</title>
@@ -25,10 +54,18 @@ const fullTitle = title === SITE.name ? SITE.name : `${title} — ${SITE.name}`;
 <meta property="og:url" content={canonical} />
 <meta property="og:site_name" content={SITE.name} />
 <meta property="og:locale" content="de_DE" />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={`${SITE.name} — ${SITE.description}`} />
 {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+{modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
 
 <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />

@@ -17,7 +17,13 @@ const { back, items = [], accent } = Astro.props;
 ---
 
 <div class="strip">
-	{back && <a class="back" href={back.href}>{back.label}</a>}
+	{
+		back && (
+			<a class="back" href={back.href}>
+				{back.label}
+			</a>
+		)
+	}
 	{items.map((item) => <span>{item}</span>)}
 	{accent && <span class="accent">{accent}</span>}
 </div>

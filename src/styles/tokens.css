@@ -8,7 +8,7 @@
 	/* ---- Ground ---- */
 	--ink: #0a0a0a; /* text, 2px rules, inverted blocks */
 	--paper: #f5f5f1; /* page background */
-	--paper-alt: #EDEDE7; /* row hover, tinted panel */
+	--paper-alt: #edede7; /* row hover, tinted panel */
 	--white: #ffffff; /* figure interiors only */
 
 	/* ---- Accent (cobalt) ---- */

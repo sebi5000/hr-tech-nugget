@@ -1,6 +1,10 @@
 ---
+import Fill from '@/components/Fill.astro';
 import LegalLayout from '@/layouts/LegalLayout.astro';
-import { SITE } from '@/config/site';
+import { isPublishReady, missingOwnerFields, OWNER, SITE } from '@/config/site';
+
+const ready = isPublishReady();
+const missing = missingOwnerFields();
 ---
 
 <LegalLayout
@@ -9,24 +13,30 @@ import { SITE } from '@/config/site';
 	label="DATENSCHUTZ"
 	accent="DSGVO"
 >
-	<p class="notice">
-		AUSZUFÜLLEN VOR VERÖFFENTLICHUNG. Die mit [ ] markierten Felder müssen ersetzt werden. Diese
-		Seite beschreibt den tatsächlichen technischen Stand der Website, ist aber keine
-		Rechtsberatung — bei Unsicherheit anwaltlich prüfen lassen.
-	</p>
+	{
+		!ready && (
+			<p class="notice">
+				NOCH NICHT VERÖFFENTLICHUNGSREIF. Offen in <code>src/config/site.ts</code>:{' '}
+				{missing.join(', ')}. Diese Seite beschreibt den tatsächlichen technischen Stand der
+				Website, ist aber keine Rechtsberatung — bei Unsicherheit anwaltlich prüfen lassen.
+			</p>
+		)
+	}
 
 	<h2>Verantwortlicher</h2>
 	<p>
 		{SITE.author}<br />
-		<span class="todo">[ANSCHRIFT WIE IM IMPRESSUM]</span><br />
-		E-Mail: <span class="todo">[DEINE E-MAIL-ADRESSE]</span>
+		<Fill value={OWNER.street} placeholder="STRASSE UND HAUSNUMMER" /><br />
+		<Fill value={OWNER.postalCity} placeholder="PLZ UND ORT" /><br />
+		E-Mail: <Fill value={OWNER.email} placeholder="E-MAIL-ADRESSE" />
 	</p>
 
 	<h2>Kurzfassung</h2>
 	<p>
-		Diese Website setzt <strong>keine Cookies</strong>, bindet <strong>kein Analyse-Werkzeug</strong>
-		ein und lädt <strong>keine Inhalte von Drittanbietern</strong> nach. Personenbezogene Daten
-		verarbeite ich nur, wenn du dich aktiv für den Newsletter anmeldest oder mir schreibst.
+		Diese Website setzt <strong>keine Cookies</strong>, bindet <strong>kein Analyse-Werkzeug</strong
+		>
+		ein und lädt <strong>keine Inhalte von Drittanbietern</strong> nach. Personenbezogene Daten verarbeite
+		ich nur, wenn du dich aktiv für den Newsletter anmeldest oder mir schreibst.
 	</p>
 
 	<h2>Hosting</h2>
@@ -41,8 +51,7 @@ import { SITE } from '@/config/site';
 	<p>
 		Die verwendeten Schriften (Space Grotesk, IBM Plex Mono, IBM Plex Sans) werden
 		<strong>vollständig von diesem Server ausgeliefert</strong>. Beim Aufruf der Seite entsteht
-		<strong>keine Verbindung zu Google Fonts</strong> und es wird keine IP-Adresse an Google
-		übermittelt.
+		<strong>keine Verbindung zu Google Fonts</strong> und es wird keine IP-Adresse an Google übermittelt.
 	</p>
 
 	<h2>Newsletter</h2>
@@ -59,15 +68,15 @@ import { SITE } from '@/config/site';
 	</p>
 	<p>
 		Die Übermittlung in die USA erfolgt auf Grundlage der Standardvertragsklauseln der EU-Kommission
-		bzw. der Zertifizierung nach dem EU-US Data Privacy Framework.
-		<span class="todo">[VOR VERÖFFENTLICHUNG PRÜFEN, WELCHE GRUNDLAGE BUTTONDOWN AKTUELL NUTZT]</span>
+		bzw. der Zertifizierung nach dem EU-US Data Privacy Framework. Bitte vor Veröffentlichung
+		prüfen, welche Grundlage Buttondown aktuell angibt.
 	</p>
 
 	<h2>Kontaktaufnahme</h2>
 	<p>
-		Wenn du mir schreibst, verarbeite ich deine Angaben zur Bearbeitung der Anfrage
-		(Art. 6 Abs. 1 lit. b bzw. lit. f DSGVO). Ich lösche diese Daten, sobald sie nicht mehr
-		erforderlich sind und keine gesetzlichen Aufbewahrungspflichten entgegenstehen.
+		Wenn du mir schreibst, verarbeite ich deine Angaben zur Bearbeitung der Anfrage (Art. 6 Abs. 1
+		lit. b bzw. lit. f DSGVO). Ich lösche diese Daten, sobald sie nicht mehr erforderlich sind und
+		keine gesetzlichen Aufbewahrungspflichten entgegenstehen.
 	</p>
 
 	<h2>Deine Rechte</h2>
@@ -80,9 +89,7 @@ import { SITE } from '@/config/site';
 		<li>Datenübertragbarkeit (Art. 20 DSGVO)</li>
 		<li>Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)</li>
 	</ul>
-	<p>
-		Außerdem kannst du dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO).
-	</p>
+	<p>Außerdem kannst du dich bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO).</p>
 
 	<h2>Änderungen</h2>
 	<p>

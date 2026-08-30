@@ -13,9 +13,10 @@ interface Props {
 	active?: NavKey | undefined;
 	type?: 'website' | 'article';
 	publishedTime?: Date | undefined;
+	modifiedTime?: Date | undefined;
 }
 
-const { title, description, active, type = 'website', publishedTime } = Astro.props;
+const { title, description, active, type = 'website', publishedTime, modifiedTime } = Astro.props;
 ---
 
 <!doctype html>
@@ -35,6 +36,7 @@ const { title, description, active, type = 'website', publishedTime } = Astro.pr
 			description={description ?? SITE.description}
 			type={type}
 			publishedTime={publishedTime}
+			modifiedTime={modifiedTime}
 		/>
 	</head>
 

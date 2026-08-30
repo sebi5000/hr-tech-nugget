@@ -18,11 +18,47 @@ export const SITE = {
 	thesis:
 		'Die meisten HR-Transformationen scheitern an derselben Stelle: Die Technik geht live, die Organisation bewegt sich nicht.',
 	establishedYear: 2026,
-	/** Buttondown newsletter username. Placeholder — see README. */
-	buttondownUser: 'PLACEHOLDER',
-	linkedinUrl: '#',
-	contactEmail: '',
 } as const;
+
+/**
+ * Everything that has to be filled in before the site may go public.
+ * Fill these once — Impressum, Datenschutz, About and the newsletter form all
+ * read from here, so there is no second place to forget.
+ *
+ * An empty string renders as a visibly marked placeholder and keeps the
+ * "not ready to publish" banner on the legal pages.
+ */
+export const OWNER = {
+	/** Buttondown newsletter username, from your Buttondown dashboard. */
+	buttondownUser: '',
+	email: '',
+	linkedinUrl: '',
+	street: '',
+	postalCity: '',
+	country: 'Deutschland',
+	/** Optional; leave empty if you do not want to publish a phone number. */
+	phone: '',
+	/** Or the note that it does not apply to a purely private site. */
+	vatId: '',
+} as const;
+
+/** Fields that must be set before publishing. `phone` is deliberately optional. */
+export const REQUIRED_OWNER_FIELDS = [
+	'buttondownUser',
+	'email',
+	'linkedinUrl',
+	'street',
+	'postalCity',
+	'vatId',
+] as const satisfies readonly (keyof typeof OWNER)[];
+
+export function missingOwnerFields(): string[] {
+	return REQUIRED_OWNER_FIELDS.filter((key) => OWNER[key].trim() === '');
+}
+
+export function isPublishReady(): boolean {
+	return missingOwnerFields().length === 0;
+}
 
 export const TOPIC_IDS = ['digitalisierung', 'ki-daten', 'organisation'] as const;
 export type TopicId = (typeof TOPIC_IDS)[number];
@@ -105,6 +141,7 @@ export const UI = {
 	aboutCta: 'ÜBER MICH',
 	newsletterHeading: 'Neue Nuggets per E-Mail.',
 	newsletterSub: 'EIN NUGGET, WENN EINES FERTIG IST. KEIN SPAM. JEDERZEIT ABBESTELLBAR.',
+	newsletterUnset: 'NEWSLETTER NOCH NICHT VERBUNDEN — buttondownUser IN site.ts SETZEN.',
 	emailPlaceholder: 'du@unternehmen.de',
 	minutes: 'MIN',
 	minutesRead: 'MIN LESEZEIT',
@@ -118,7 +155,7 @@ export const UI = {
 
 export const FOOTER_LINKS = [
 	{ label: 'RSS', href: '/rss.xml' },
-	{ label: 'LINKEDIN', href: SITE.linkedinUrl },
+	{ label: 'LINKEDIN', href: OWNER.linkedinUrl || '/ueber-mich/' },
 	{ label: 'IMPRESSUM', href: '/impressum/' },
 	{ label: 'DATENSCHUTZ', href: '/datenschutz/' },
 ] as const;

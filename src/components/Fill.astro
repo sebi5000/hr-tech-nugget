@@ -1,0 +1,27 @@
+---
+/**
+ * Renders a value from OWNER, or a visibly marked placeholder while it is empty.
+ * Keeps unfilled legal fields obvious instead of silently shipping a blank line.
+ */
+
+interface Props {
+	value: string;
+	placeholder: string;
+}
+
+const { value, placeholder } = Astro.props;
+const filled = value.trim() !== '';
+---
+
+{filled ? <span>{value}</span> : <span class="todo">[{placeholder}]</span>}
+
+<style>
+	.todo {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono);
+		background: var(--paper-alt);
+		border-left: 3px solid var(--accent);
+		padding: 4px 8px;
+		display: inline-block;
+	}
+</style>

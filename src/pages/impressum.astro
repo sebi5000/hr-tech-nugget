@@ -1,6 +1,10 @@
 ---
+import Fill from '@/components/Fill.astro';
 import LegalLayout from '@/layouts/LegalLayout.astro';
-import { SITE } from '@/config/site';
+import { isPublishReady, missingOwnerFields, OWNER, SITE } from '@/config/site';
+
+const ready = isPublishReady();
+const missing = missingOwnerFields();
 ---
 
 <LegalLayout
@@ -9,34 +13,43 @@ import { SITE } from '@/config/site';
 	label="IMPRESSUM"
 	accent="§ 5 DDG"
 >
-	<p class="notice">
-		AUSZUFÜLLEN VOR VERÖFFENTLICHUNG. Die mit [ ] markierten Felder müssen durch echte Angaben
-		ersetzt werden — ein unvollständiges Impressum ist abmahnfähig. Diese Seite ist eine Vorlage und
-		ersetzt keine Rechtsberatung.
-	</p>
+	{
+		!ready && (
+			<p class="notice">
+				NOCH NICHT VERÖFFENTLICHUNGSREIF. Offen in <code>src/config/site.ts</code>:{' '}
+				{missing.join(', ')}. Ein unvollständiges Impressum ist abmahnfähig. Diese Seite ist eine
+				Vorlage und ersetzt keine Rechtsberatung.
+			</p>
+		)
+	}
 
 	<h2>Angaben gemäß § 5 DDG</h2>
 	<p>
 		{SITE.author}<br />
-		<span class="todo">[STRASSE UND HAUSNUMMER]</span><br />
-		<span class="todo">[PLZ UND ORT]</span><br />
-		Deutschland
+		<Fill value={OWNER.street} placeholder="STRASSE UND HAUSNUMMER" /><br />
+		<Fill value={OWNER.postalCity} placeholder="PLZ UND ORT" /><br />
+		{OWNER.country}
 	</p>
 
 	<h2>Kontakt</h2>
 	<p>
-		E-Mail: <span class="todo">[DEINE E-MAIL-ADRESSE]</span><br />
-		Telefon: <span class="todo">[OPTIONAL — TELEFONNUMMER]</span>
+		E-Mail: <Fill value={OWNER.email} placeholder="E-MAIL-ADRESSE" />
+		{
+			OWNER.phone && (
+				<>
+					<br />
+					Telefon: {OWNER.phone}
+				</>
+			)
+		}
 	</p>
 
 	<h2>Verantwortlich für den Inhalt</h2>
-	<p>
-		{SITE.author}, Anschrift wie oben.
-	</p>
+	<p>{SITE.author}, Anschrift wie oben.</p>
 
 	<h2>Umsatzsteuer-Identifikationsnummer</h2>
 	<p>
-		<span class="todo">[UST-IDNR. ODER: ENTFÄLLT, DA REIN PRIVATES ANGEBOT]</span>
+		<Fill value={OWNER.vatId} placeholder="UST-IDNR. ODER: ENTFÄLLT, DA PRIVATES ANGEBOT" />
 	</p>
 
 	<h2>Hinweis zur Tätigkeit</h2>
