@@ -80,21 +80,21 @@ einmal mit dem Embed-Snippet in deinem Dashboard.
 
 ### 3. Deployment auf Cloudflare Pages
 
-```bash
-gh repo create sebi5000/hr-tech-nugget --public --source . --push
-```
+Das Repository liegt bereits auf GitHub:
+<https://github.com/sebi5000/hr-tech-nugget>
 
-Dann im Cloudflare-Dashboard: **Workers & Pages → Create → Pages → Connect to
-Git**, Repo auswählen.
+Im Cloudflare-Dashboard: **Workers & Pages → Create → Pages → Connect to Git**,
+dieses Repo auswählen.
 
-| Einstellung          | Wert                       |
-| -------------------- | -------------------------- |
-| Build command        | `pnpm build`               |
-| Output directory     | `dist`                     |
-| Environment variable | `NODE_VERSION` = `22.12.0` |
+| Einstellung      | Wert         |
+| ---------------- | ------------ |
+| Framework preset | Astro        |
+| Build command    | `pnpm build` |
+| Output directory | `dist`       |
 
-`NODE_VERSION` ist nicht optional — das Standard-Build-Image von Cloudflare ist
-älter als Astro 7 verlangt, und das ist der erste Fehler, in den du sonst läufst.
+Die Node-Version steht in `.node-version` (22.16.0) und wird von Cloudflare
+automatisch gelesen — es ist **keine** `NODE_VERSION`-Umgebungsvariable nötig.
+pnpm wird an der `pnpm-lock.yaml` erkannt.
 
 Nur **einen** Deploy-Weg verwenden. Git-Integration _und_ ein
 Wrangler-GitHub-Action gleichzeitig erzeugen doppelte Deployments, die um den
