@@ -1,0 +1,106 @@
+---
+import { formatDate, topicById, UI } from '@/config/site';
+import type { Nugget } from '@/lib/nuggets';
+
+interface Props {
+	nuggets: Nugget[];
+}
+
+const { nuggets } = Astro.props;
+---
+
+{
+	nuggets.length > 0 && (
+		<div class="readnext">
+			<div class="head">{UI.readNext}</div>
+			<div class="grid">
+				{nuggets.map((n) => {
+					const topic = topicById(n.entry.data.topic);
+					return (
+						<a class="card" href={`/nuggets/${n.entry.id}/`}>
+							<span class="topic">{topic.short}</span>
+							<span class="title">{n.entry.data.title}</span>
+							<span class="meta">
+								{formatDate(n.entry.data.published)} &nbsp;/&nbsp; {n.readingMinutes} {UI.minutes}
+							</span>
+						</a>
+					);
+				})}
+			</div>
+		</div>
+	)
+}
+
+<style>
+	.readnext {
+		border-bottom: var(--rule);
+	}
+
+	.head {
+		padding: 18px var(--pad-band);
+		border-bottom: var(--rule);
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		font-weight: 600;
+		letter-spacing: var(--track-label-wide);
+		color: var(--muted-strong);
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.card {
+		color: inherit;
+		text-decoration: none;
+		padding: 28px var(--pad-band);
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.card:not(:last-child) {
+		border-right: var(--rule);
+	}
+	.card:hover {
+		background: var(--paper-alt);
+		color: inherit;
+		text-decoration: none;
+	}
+	.card:hover .title {
+		color: var(--accent);
+	}
+
+	.topic {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		letter-spacing: var(--track-label-tight);
+		color: var(--accent);
+	}
+
+	.title {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 20px;
+		line-height: 1.25;
+	}
+
+	.meta {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		color: var(--muted);
+	}
+
+	@media (max-width: 759px) {
+		.grid {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.card:not(:last-child) {
+			border-right: none;
+			border-bottom: var(--rule);
+		}
+		.card {
+			padding: 22px var(--pad-band);
+		}
+	}
+</style>

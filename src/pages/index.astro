@@ -1,0 +1,196 @@
+---
+import ArchiveTable from '@/components/ArchiveTable.astro';
+import FeaturedNugget from '@/components/FeaturedNugget.astro';
+import NewsletterBlock from '@/components/NewsletterBlock.astro';
+import SpecStrip from '@/components/SpecStrip.astro';
+import TopicCard from '@/components/TopicCard.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { formatDate, nuggetCount, pad2, SITE, TOPICS, UI } from '@/config/site';
+import { allNuggets, homeArchive, lastUpdated, latestNugget, nuggetsByTopic } from '@/lib/nuggets';
+
+const featured = await latestNugget();
+const rows = await homeArchive(5);
+const total = (await allNuggets()).length;
+const updated = await lastUpdated();
+
+const counts = new Map<string, number>();
+for (const topic of TOPICS) {
+	counts.set(topic.id, (await nuggetsByTopic(topic.id)).length);
+}
+---
+
+<BaseLayout title={SITE.name} description={SITE.description}>
+	<SpecStrip
+		back={null}
+		items={[
+			`SEIT ${SITE.establishedYear}`,
+			`VON ${SITE.author.toUpperCase()}`,
+			'DIGITALISIERUNG / KI & DATEN / MODERNE HR-ORG',
+		]}
+		accent={updated ? `${UI.updated} ${formatDate(updated)}` : undefined}
+	/>
+
+	<div class="hero">
+		<div class="headline">
+			<p class="eyebrow">N.{featured ? pad2(featured.number) : '01'} &mdash; {UI.fieldNotes}</p>
+			<h1>HR neu bauen<br />für das <span class="accent">KI-Zeitalter.</span></h1>
+			<p class="dek">
+				Ich schreibe über die Digitalisierung von HR, über den sinnvollen Einsatz von KI und Daten
+				und darüber, was es wirklich braucht, um aus einer Personalabteilung eine moderne
+				Organisation zu machen &mdash; von jemandem, der das beruflich macht, nicht von der
+				Seitenlinie.
+			</p>
+		</div>
+
+		<aside class="thesis">
+			<p class="eyebrow muted">{UI.thesisLabel}</p>
+			<p class="thesis-text">{SITE.thesis}</p>
+			<div class="thesis-foot">
+				<p>KEINE SPONSOREN. KEINE PDFS HINTER FORMULAREN.</p>
+				<p>EIN NUGGET, WENN EINES FERTIG IST.</p>
+			</div>
+		</aside>
+	</div>
+
+	<div class="topics">
+		{TOPICS.map((topic) => <TopicCard topic={topic} count={counts.get(topic.id) ?? 0} />)}
+	</div>
+
+	{featured && <FeaturedNugget nugget={featured} />}
+
+	{
+		rows.length > 0 && (
+			<ArchiveTable
+				nuggets={rows}
+				label={UI.moreNuggets}
+				footer={{
+					href: '/nuggets/',
+					label: `${UI.fullArchive} — ${nuggetCount(total)} →`,
+				}}
+			/>
+		)
+	}
+
+	<NewsletterBlock />
+</BaseLayout>
+
+<style>
+	.hero {
+		border-bottom: var(--rule);
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) var(--gutter-thesis);
+	}
+
+	.headline {
+		padding: 56px var(--pad-band-lg) 52px;
+	}
+
+	.eyebrow {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		font-weight: 600;
+		letter-spacing: var(--track-label-wide);
+		color: var(--accent);
+		margin-bottom: 24px;
+	}
+	.eyebrow.muted {
+		color: var(--muted-strong);
+	}
+
+	h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--fs-hero);
+		line-height: var(--lh-hero);
+		letter-spacing: var(--track-display);
+		margin-bottom: 28px;
+	}
+
+	.accent {
+		color: var(--accent);
+	}
+
+	.dek {
+		font-size: 17px;
+		line-height: var(--lh-body);
+		color: var(--body-soft);
+		max-width: 560px;
+	}
+
+	.thesis {
+		border-left: var(--rule);
+		padding: 56px 36px;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.thesis-text {
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: 20px;
+		line-height: 1.35;
+	}
+
+	.thesis-foot {
+		border-top: var(--rule);
+		padding-top: 20px;
+		margin-top: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.thesis-foot p {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		letter-spacing: var(--track-label-tight);
+		color: var(--muted-strong);
+	}
+
+	.topics {
+		border-bottom: var(--rule);
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+	.topics > :global(*:not(:last-child)) {
+		border-right: var(--rule);
+	}
+
+	@media (max-width: 979px) {
+		.hero {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.thesis {
+			border-left: none;
+			border-top: var(--rule);
+			background: var(--paper-alt);
+			padding: 24px var(--pad-band);
+		}
+		.thesis-foot {
+			margin-top: 0;
+		}
+		.topics {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.topics > :global(*:not(:last-child)) {
+			border-right: none;
+			border-bottom: var(--rule);
+		}
+	}
+
+	@media (max-width: 759px) {
+		.headline {
+			padding: 28px var(--pad-band) 26px;
+		}
+		.eyebrow {
+			margin-bottom: 16px;
+		}
+		h1 {
+			margin-bottom: 18px;
+		}
+		.dek {
+			font-size: var(--fs-base);
+		}
+	}
+</style>

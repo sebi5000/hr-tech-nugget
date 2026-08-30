@@ -1,0 +1,186 @@
+---
+import { NAV, SITE, UI, type NavKey } from '@/config/site';
+
+interface Props {
+	active?: NavKey | undefined;
+}
+
+const { active } = Astro.props;
+---
+
+<div class="topbar on-dark">
+	<a class="wordmark" href="/">
+		<span class="mark" aria-hidden="true"></span>
+		<span class="name">{SITE.name.toUpperCase()}</span>
+	</a>
+
+	<div class="right">
+		<nav class="nav" aria-label="Hauptnavigation">
+			{
+				NAV.map((item) => (
+					<a
+						class:list={['navlink', { active: active === item.key }]}
+						href={item.href}
+						aria-current={active === item.key ? 'page' : undefined}
+					>
+						{item.label}
+					</a>
+				))
+			}
+		</nav>
+		<a class="subscribe" href="#newsletter">{UI.subscribe}</a>
+	</div>
+
+	<details class="menu">
+		<summary aria-label={UI.menu}>
+			<svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+				<path d="M0 1h22M0 8h22M0 15h22"></path>
+			</svg>
+		</summary>
+		<nav class="drawer" aria-label="Hauptnavigation">
+			{NAV.map((item) => <a href={item.href}>{item.label}</a>)}
+			<a class="drawer-sub" href="#newsletter">{UI.subscribe}</a>
+		</nav>
+	</details>
+</div>
+
+<style>
+	.topbar {
+		position: relative;
+		background: var(--ink);
+		color: var(--on-dark);
+		height: var(--topbar-h);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 var(--pad-band);
+	}
+
+	.wordmark {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		min-height: 44px;
+		color: var(--on-dark);
+		text-decoration: none;
+	}
+	.wordmark:hover {
+		color: var(--on-dark);
+		text-decoration: none;
+	}
+
+	.mark {
+		width: 12px;
+		height: 12px;
+		background: var(--accent-bright);
+		display: block;
+		flex-shrink: 0;
+	}
+
+	.name {
+		font-family: var(--font-mono);
+		font-size: 14px;
+		font-weight: 600;
+		letter-spacing: var(--track-label-tight);
+	}
+
+	.right {
+		display: flex;
+		align-items: center;
+		gap: var(--pad-band);
+	}
+
+	.nav {
+		display: flex;
+		gap: 28px;
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 500;
+		letter-spacing: var(--track-label);
+	}
+
+	.navlink {
+		color: var(--on-dark);
+		padding-bottom: 3px;
+		border-bottom: 2px solid transparent;
+		text-decoration: none;
+	}
+	.navlink:hover,
+	.navlink.active {
+		color: var(--on-dark);
+		text-decoration: none;
+		border-bottom-color: var(--accent-bright);
+	}
+
+	.subscribe {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: var(--track-label-tight);
+		background: var(--accent);
+		color: var(--on-dark);
+		padding: 12px 18px;
+		text-decoration: none;
+	}
+	.subscribe:hover {
+		background: var(--accent-hover);
+		color: var(--on-dark);
+		text-decoration: none;
+	}
+
+	/* Zero-JS disclosure nav. Hidden on desktop. */
+	.menu {
+		display: none;
+	}
+	.menu summary {
+		list-style: none;
+		width: 44px;
+		height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		cursor: pointer;
+		color: var(--on-dark);
+	}
+	.menu summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.drawer {
+		position: absolute;
+		top: var(--topbar-h);
+		left: 0;
+		right: 0;
+		z-index: 20;
+		background: var(--ink);
+		border-top: 2px solid var(--accent-bright);
+		display: flex;
+		flex-direction: column;
+	}
+	.drawer a {
+		color: var(--on-dark);
+		font-family: var(--font-mono);
+		font-size: 13px;
+		font-weight: 500;
+		letter-spacing: var(--track-label);
+		padding: 18px var(--pad-band);
+		border-bottom: 1px solid #2a2a2a;
+		text-decoration: none;
+	}
+	.drawer a:last-child {
+		border-bottom: none;
+	}
+	.drawer-sub {
+		color: var(--accent-bright) !important;
+	}
+
+	@media (max-width: 759px) {
+		.right {
+			display: none;
+		}
+		.menu {
+			display: block;
+			margin-right: -10px;
+		}
+	}
+</style>

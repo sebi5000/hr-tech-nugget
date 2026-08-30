@@ -1,0 +1,121 @@
+---
+type Bar = {
+	label: string;
+	pct: number;
+	/** 'accent' (default) is the cobalt fill; 'muted' is the grey one. */
+	tone?: 'accent' | 'muted';
+};
+
+interface Props {
+	caption: string;
+	bars: Bar[];
+	/** Override the auto CSS counter, e.g. when referring to a figure in prose. */
+	n?: number | undefined;
+}
+
+const { caption, bars, n } = Astro.props;
+---
+
+<figure class="figure" style={n !== undefined ? `--fig-n: '${String(n).padStart(2, '0')}'` : undefined}>
+	<figcaption class:list={['caption', { manual: n !== undefined }]}>{caption}</figcaption>
+
+	<div class="bars">
+		{
+			bars.map((bar) => (
+				<div class="bar-row">
+					<p class="label">{bar.label}</p>
+					<div class="track" role="img" aria-label={`${bar.label}: ${bar.pct} Prozent`}>
+						<div class:list={['fill', bar.tone ?? 'accent']} style={`width: ${bar.pct}%`} />
+					</div>
+					<p class="pct">{bar.pct}%</p>
+				</div>
+			))
+		}
+	</div>
+</figure>
+
+<style>
+	.figure {
+		border: var(--rule);
+		margin: 32px 0 36px;
+	}
+
+	.caption {
+		border-bottom: var(--rule);
+		padding: 14px 20px;
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		font-weight: 600;
+		letter-spacing: var(--track-label);
+		color: var(--muted-strong);
+	}
+
+	/* Figures renumber themselves when reordered. */
+	.caption::before {
+		counter-increment: fig;
+		content: 'ABB. ' counter(fig, decimal-leading-zero) ' — ';
+	}
+	.caption.manual::before {
+		content: 'ABB. ' var(--fig-n) ' — ';
+	}
+
+	.bars {
+		padding: 24px 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+	}
+
+	.bar-row {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+	}
+
+	.label {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		letter-spacing: 0.04em;
+		width: 200px;
+		flex-shrink: 0;
+		color: var(--body);
+	}
+
+	.track {
+		flex-grow: 1;
+		border: var(--rule);
+		height: 32px;
+	}
+
+	.fill {
+		height: 100%;
+	}
+	.fill.accent {
+		background: var(--accent);
+	}
+	.fill.muted {
+		background: var(--rule-light-color);
+	}
+
+	.pct {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono);
+		font-weight: 600;
+		width: 44px;
+		text-align: right;
+	}
+
+	@media (max-width: 759px) {
+		.bar-row {
+			flex-wrap: wrap;
+			gap: 8px 12px;
+		}
+		.label {
+			width: auto;
+			flex-basis: 100%;
+		}
+		.track {
+			height: 26px;
+		}
+	}
+</style>

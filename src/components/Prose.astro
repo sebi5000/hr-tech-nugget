@@ -1,0 +1,116 @@
+---
+/**
+ * The two-column article grid: measure on the left, margin-note gutter on the right.
+ *
+ * Placement relies on CSS Grid's default *sparse* auto-placement. A paragraph
+ * takes column 1 and advances the cursor; a <Note> has a definite column 2 and
+ * an auto row, so it lands in the cursor's row — i.e. top-aligned with the block
+ * it follows in the source. No offsets, no measurement, any number of notes.
+ *
+ * Styles are global on purpose: elements rendered by <Content /> do not carry
+ * this component's scope attribute, so scoped selectors would silently miss them
+ * and every paragraph would lose `grid-column: 1`.
+ */
+---
+
+<div class="prose">
+	<slot />
+</div>
+
+<style is:global>
+	.prose {
+		display: grid;
+		grid-template-columns: minmax(0, var(--measure)) var(--gutter-note);
+		gap: 0 var(--space-gutter);
+		justify-content: center;
+		align-items: start;
+		counter-reset: fig;
+	}
+
+	.prose > * {
+		grid-column: 1;
+	}
+	.prose > .note {
+		grid-column: 2;
+		align-self: start;
+	}
+
+	.prose > p {
+		font-size: var(--fs-prose);
+		line-height: var(--lh-prose);
+		color: var(--body);
+		margin: 0 0 26px;
+	}
+
+	/* The lede. Requires that a nugget opens with a paragraph, not a component. */
+	.prose > p:first-of-type {
+		font-size: var(--fs-lede);
+		line-height: var(--lh-body);
+	}
+
+	.prose > ul,
+	.prose > ol {
+		font-size: var(--fs-prose);
+		line-height: var(--lh-prose);
+		color: var(--body);
+		margin: 0 0 26px;
+		padding-left: 24px;
+	}
+
+	.prose > ul li,
+	.prose > ol li {
+		margin-bottom: 8px;
+	}
+
+	.prose a {
+		color: var(--accent);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+	.prose a:hover {
+		color: var(--accent-hover);
+	}
+
+	.prose strong {
+		font-weight: 600;
+	}
+
+	.prose code {
+		font-family: var(--font-mono);
+		font-size: 0.9em;
+		background: var(--paper-alt);
+		padding: 2px 5px;
+	}
+
+	.prose pre {
+		background: var(--ink);
+		color: var(--on-dark);
+		padding: 20px;
+		overflow-x: auto;
+		margin: 0 0 26px;
+	}
+	.prose pre code {
+		background: none;
+		padding: 0;
+		color: inherit;
+	}
+
+	.prose > hr {
+		border: none;
+		border-top: var(--rule);
+		margin: 36px 0;
+	}
+
+	/*
+	 * The note gutter cannot fit: 720 + 56 + 240 exceeds the frame. Collapse to a
+	 * single column — each note falls directly under the paragraph it annotates,
+	 * because it already sits there in the source.
+	 */
+	@media (max-width: 1199px) {
+		.prose {
+			display: block;
+			max-width: var(--measure);
+			margin-inline: auto;
+		}
+	}
+</style>

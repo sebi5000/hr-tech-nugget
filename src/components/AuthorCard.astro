@@ -1,0 +1,69 @@
+---
+import Monogram from '@/components/Monogram.astro';
+import { SITE, UI } from '@/config/site';
+---
+
+<div class="author">
+	<Monogram size={64} />
+	<div class="text">
+		<p class="name">{SITE.author}</p>
+		<p class="bio">{SITE.authorBio}</p>
+	</div>
+	<a class="btn" href="/ueber-mich/">{UI.aboutCta} &rarr;</a>
+</div>
+
+<style>
+	.author {
+		border-bottom: var(--rule);
+		padding: var(--pad-band) var(--pad-band-lg);
+		display: flex;
+		align-items: center;
+		gap: 24px;
+	}
+
+	.text {
+		flex-grow: 1;
+	}
+
+	.name {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 17px;
+		margin-bottom: 5px;
+	}
+
+	.bio {
+		font-size: var(--fs-sm);
+		color: var(--muted-strong);
+	}
+
+	.btn {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: var(--track-label-tight);
+		border: var(--rule);
+		color: var(--ink);
+		padding: 14px 22px;
+		white-space: nowrap;
+		text-decoration: none;
+	}
+	.btn:hover {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: var(--on-dark);
+		text-decoration: none;
+	}
+
+	@media (max-width: 759px) {
+		.author {
+			flex-wrap: wrap;
+			padding: 24px var(--pad-band);
+			gap: 16px;
+		}
+		.btn {
+			width: 100%;
+			text-align: center;
+		}
+	}
+</style>

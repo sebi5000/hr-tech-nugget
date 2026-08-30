@@ -1,0 +1,140 @@
+---
+import { formatDate, pad2, topicById, UI } from '@/config/site';
+import type { Nugget } from '@/lib/nuggets';
+
+interface Props {
+	nugget: Nugget;
+	last?: boolean;
+}
+
+const { nugget, last = false } = Astro.props;
+const { entry, number, readingMinutes } = nugget;
+const topic = topicById(entry.data.topic);
+---
+
+<a class:list={['row', { last }]} href={`/nuggets/${entry.id}/`}>
+	<span class="no">{pad2(number)}</span>
+	<span class="date">{formatDate(entry.data.published)}</span>
+	<span class="title">{entry.data.title}</span>
+	<span class="topic">{topic.short}</span>
+	<span class="time">{readingMinutes} {UI.minutes}</span>
+	<span class="meta" aria-hidden="true">{pad2(number)} / {readingMinutes} {UI.minutes}</span>
+</a>
+
+<style>
+	.row {
+		color: inherit;
+		text-decoration: none;
+		display: grid;
+		grid-template-columns: 60px 120px minmax(0, 1fr) 240px 90px;
+		grid-template-areas: 'no date title topic time';
+		gap: 24px;
+		align-items: baseline;
+		padding: 26px var(--pad-band);
+		border-bottom: var(--rule-hair);
+	}
+	.row.last {
+		border-bottom: none;
+	}
+	.row:hover {
+		background: var(--paper-alt);
+		color: inherit;
+		text-decoration: none;
+	}
+	.row:hover .title {
+		color: var(--accent);
+	}
+
+	.no {
+		grid-area: no;
+	}
+	.date {
+		grid-area: date;
+	}
+	.title {
+		grid-area: title;
+	}
+	.topic {
+		grid-area: topic;
+	}
+	.time {
+		grid-area: time;
+		text-align: right;
+	}
+
+	.no,
+	.date,
+	.time {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono);
+		color: var(--muted);
+	}
+
+	.title {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: var(--fs-row-title);
+		line-height: 1.3;
+	}
+
+	.topic {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		letter-spacing: var(--track-label-tight);
+		color: var(--accent);
+	}
+
+	/* Desktop shows No. and Time as their own columns; mobile merges them. */
+	.meta {
+		display: none;
+		grid-area: meta;
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-xs);
+		letter-spacing: var(--track-label-tight);
+		color: var(--muted);
+		text-align: right;
+	}
+
+	@media (max-width: 979px) {
+		.row {
+			grid-template-columns: 60px 120px minmax(0, 1fr) 90px;
+			grid-template-areas: 'no date title time';
+			gap: 16px;
+		}
+		.topic {
+			display: none;
+		}
+	}
+
+	/*
+	 * Below 760 the table becomes stacked cards, exactly as MobileHome.dc.html
+	 * draws it: topic left, "11 / 6 MIN" right, then title, then date.
+	 * Purely CSS — no content is conditionally rendered.
+	 */
+	@media (max-width: 759px) {
+		.row {
+			grid-template-columns: 1fr auto;
+			grid-template-areas:
+				'topic meta'
+				'title title'
+				'date  date';
+			gap: 8px 12px;
+			padding: 20px var(--pad-band);
+			align-items: baseline;
+		}
+		.no,
+		.time {
+			display: none;
+		}
+		.topic {
+			display: block;
+			font-size: var(--fs-mono-xs);
+		}
+		.meta {
+			display: block;
+		}
+		.date {
+			font-size: var(--fs-mono-sm);
+		}
+	}
+</style>

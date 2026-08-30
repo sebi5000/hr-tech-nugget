@@ -1,0 +1,99 @@
+---
+import type { GetStaticPaths } from 'astro';
+import ArchiveTable from '@/components/ArchiveTable.astro';
+import NewsletterBlock from '@/components/NewsletterBlock.astro';
+import SpecStrip from '@/components/SpecStrip.astro';
+import TopicIcon from '@/components/TopicIcon.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { nuggetCount, TOPICS, UI, type Topic } from '@/config/site';
+import { nuggetsByTopic } from '@/lib/nuggets';
+
+export const getStaticPaths = (() =>
+	TOPICS.map((topic) => ({
+		params: { topic: topic.id },
+		props: { topic },
+	}))) satisfies GetStaticPaths;
+
+interface Props {
+	topic: Topic;
+}
+
+const { topic } = Astro.props;
+const nuggets = await nuggetsByTopic(topic.id);
+---
+
+<BaseLayout title={topic.title} description={topic.dek} active="themen">
+	<SpecStrip
+		back={{ href: '/themen/', label: UI.backTopics }}
+		items={[`THEMA ${topic.order}`, topic.short]}
+		accent={nuggetCount(nuggets.length)}
+	/>
+
+	<div class="head">
+		<span class="icon"><TopicIcon topic={topic.id} size={40} /></span>
+		<div>
+			<h1>{topic.title}</h1>
+			<p>{topic.dek}</p>
+		</div>
+	</div>
+
+	{
+		nuggets.length > 0 ? (
+			<ArchiveTable nuggets={nuggets} label={UI.archive} />
+		) : (
+			<p class="empty">Zu diesem Thema ist noch nichts erschienen.</p>
+		)
+	}
+
+	<NewsletterBlock />
+</BaseLayout>
+
+<style>
+	.head {
+		border-bottom: var(--rule);
+		padding: 48px var(--pad-band-lg);
+		display: flex;
+		gap: 28px;
+		align-items: flex-start;
+	}
+
+	.icon {
+		color: var(--accent);
+		flex-shrink: 0;
+		display: block;
+		padding-top: 6px;
+	}
+
+	h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--fs-h1);
+		line-height: 1;
+		letter-spacing: var(--track-display);
+		margin-bottom: 14px;
+	}
+
+	.head p {
+		font-size: var(--fs-dek);
+		color: var(--body-soft);
+		max-width: 640px;
+	}
+
+	.empty {
+		border-bottom: var(--rule);
+		padding: 48px var(--pad-band-lg);
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono);
+		color: var(--muted);
+	}
+
+	@media (max-width: 759px) {
+		.head {
+			padding: 28px var(--pad-band);
+			gap: 18px;
+		}
+		.empty {
+			padding: 28px var(--pad-band);
+		}
+	}
+</style>

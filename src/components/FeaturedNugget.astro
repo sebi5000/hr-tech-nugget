@@ -1,0 +1,161 @@
+---
+import { formatDate, topicById, UI } from '@/config/site';
+import type { Nugget } from '@/lib/nuggets';
+
+interface Props {
+	nugget: Nugget;
+}
+
+const { nugget } = Astro.props;
+const { entry, number, readingMinutes } = nugget;
+const topic = topicById(entry.data.topic);
+---
+
+<div class="featured">
+	<div class="rail on-dark">
+		<div class="rail-top">
+			<p class="label">{UI.latest}</p>
+			<p class="number">{number}</p>
+		</div>
+		<p class="rail-topic">{topic.short}</p>
+	</div>
+
+	<a class="body" href={`/nuggets/${entry.id}/`}>
+		<h2>{entry.data.title}</h2>
+		<p class="dek">{entry.data.dek}</p>
+		<div class="foot">
+			<span class="cta">{UI.readNugget} &rarr;</span>
+			<span class="meta">
+				{formatDate(entry.data.published)} &nbsp;/&nbsp; {readingMinutes} {UI.minutes}
+			</span>
+		</div>
+	</a>
+</div>
+
+<style>
+	.featured {
+		border-bottom: var(--rule);
+		display: grid;
+		grid-template-columns: 300px minmax(0, 1fr);
+	}
+
+	.rail {
+		background: var(--accent);
+		color: var(--on-dark);
+		padding: 36px var(--pad-band);
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.label {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		font-weight: 600;
+		letter-spacing: var(--track-label-wide);
+		opacity: 0.85;
+		margin-bottom: 8px;
+	}
+
+	.number {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 60px;
+		line-height: 1;
+	}
+
+	.rail-topic {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		letter-spacing: var(--track-label-tight);
+		opacity: 0.85;
+	}
+
+	.body {
+		color: inherit;
+		text-decoration: none;
+		padding: 40px 44px;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+	.body:hover {
+		color: inherit;
+		text-decoration: none;
+	}
+	.body:hover h2 {
+		color: var(--accent);
+	}
+
+	h2 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--fs-h2);
+		line-height: 1.12;
+		letter-spacing: var(--track-display-soft);
+		max-width: 780px;
+	}
+
+	.dek {
+		font-size: 16px;
+		line-height: var(--lh-body);
+		color: var(--body-soft);
+		max-width: 680px;
+	}
+
+	.foot {
+		display: flex;
+		align-items: center;
+		gap: 24px;
+		margin-top: 8px;
+		flex-wrap: wrap;
+	}
+
+	.cta {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: var(--track-label-tight);
+		background: var(--ink);
+		color: var(--on-dark);
+		border: var(--rule);
+		padding: 14px 24px;
+	}
+	.body:hover .cta {
+		background: var(--accent);
+		border-color: var(--accent);
+	}
+
+	.meta {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		color: var(--muted-strong);
+	}
+
+	/* The 300px cobalt rail becomes a full-width top strip. */
+	@media (max-width: 979px) {
+		.featured {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.rail {
+			flex-direction: row;
+			align-items: baseline;
+			justify-content: space-between;
+			padding: 16px var(--pad-band);
+		}
+		.rail-top {
+			display: flex;
+			align-items: baseline;
+			gap: 12px;
+		}
+		.label {
+			margin-bottom: 0;
+		}
+		.number {
+			font-size: 22px;
+		}
+		.body {
+			padding: 24px var(--pad-band);
+		}
+	}
+</style>

@@ -1,0 +1,217 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import AuthorCard from '@/components/AuthorCard.astro';
+import BarFigure from '@/components/BarFigure.astro';
+import NewsletterBlock from '@/components/NewsletterBlock.astro';
+import Note from '@/components/Note.astro';
+import Prose from '@/components/Prose.astro';
+import PullQuote from '@/components/PullQuote.astro';
+import ReadNext from '@/components/ReadNext.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { formatDate, pad2, SITE, topicById, UI } from '@/config/site';
+import { allNuggets, readNext, type Nugget } from '@/lib/nuggets';
+
+export const getStaticPaths = (async () => {
+	const nuggets = await allNuggets();
+	return nuggets.map((nugget) => ({
+		params: { slug: nugget.entry.id },
+		props: { nugget },
+	}));
+}) satisfies GetStaticPaths;
+
+interface Props {
+	nugget: Nugget;
+}
+
+const { nugget } = Astro.props;
+const { entry, number, readingMinutes } = nugget;
+const topic = topicById(entry.data.topic);
+const { Content } = await render(entry);
+const next = await readNext(nugget);
+---
+
+<BaseLayout
+	title={entry.data.title}
+	description={entry.data.dek}
+	active="nuggets"
+	type="article"
+	publishedTime={entry.data.published}
+>
+	<div class="crumb">
+		<a href="/nuggets/">{UI.backNuggets}</a>
+		<span class="sep">/</span>
+		<a href={`/themen/${topic.id}/`}>{topic.short}</a>
+		<span class="sep">/</span>
+		<span>N.{pad2(number)}</span>
+	</div>
+
+	<header class="header">
+		<div class="title-col">
+			<span class="badge">{topic.short}</span>
+			<h1>{entry.data.title}</h1>
+			<p class="dek">{entry.data.dek}</p>
+		</div>
+
+		<aside class="meta-col">
+			<div>
+				<p class="key">{UI.author}</p>
+				<p class="val">{SITE.author.toUpperCase()}</p>
+			</div>
+			<div>
+				<p class="key">{UI.published}</p>
+				<p class="val">{formatDate(entry.data.published)}</p>
+			</div>
+			<div>
+				<p class="key">{UI.readingTime}</p>
+				<p class="val">{readingMinutes} {UI.minutes}</p>
+			</div>
+			{
+				entry.data.updated && (
+					<div>
+						<p class="key">{UI.updated}</p>
+						<p class="val">{formatDate(entry.data.updated)}</p>
+					</div>
+				)
+			}
+		</aside>
+	</header>
+
+	<div class="body">
+		<Prose>
+			<Content components={{ Note, PullQuote, BarFigure, h2: SectionHeading }} />
+		</Prose>
+	</div>
+
+	<AuthorCard />
+	<ReadNext nuggets={next} />
+	<NewsletterBlock />
+</BaseLayout>
+
+<style>
+	.crumb {
+		border-bottom: var(--rule);
+		padding: 14px var(--pad-band);
+		display: flex;
+		gap: 24px;
+		align-items: center;
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		font-weight: 500;
+		letter-spacing: var(--track-label);
+		color: var(--muted-strong);
+	}
+
+	.crumb a {
+		color: var(--ink);
+		text-decoration: none;
+	}
+	.crumb a:hover {
+		color: var(--accent);
+		text-decoration: underline;
+	}
+
+	.sep {
+		color: var(--rule-light-color);
+	}
+
+	.header {
+		border-bottom: var(--rule);
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) var(--gutter-meta);
+	}
+
+	.title-col {
+		padding: 52px var(--pad-band-lg) 44px;
+	}
+
+	.badge {
+		display: inline-block;
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		font-weight: 600;
+		letter-spacing: var(--track-label);
+		background: var(--accent);
+		color: var(--on-dark);
+		padding: 7px 12px;
+		margin-bottom: 24px;
+	}
+
+	h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--fs-h1-article);
+		line-height: 1.04;
+		letter-spacing: var(--track-display);
+		margin-bottom: 24px;
+		max-width: 900px;
+	}
+
+	.dek {
+		font-size: var(--fs-dek);
+		line-height: var(--lh-body);
+		color: var(--body-soft);
+		max-width: 720px;
+	}
+
+	.meta-col {
+		border-left: var(--rule);
+		padding: 52px 28px;
+		display: flex;
+		flex-direction: column;
+		gap: 22px;
+	}
+
+	.key {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		letter-spacing: var(--track-label-tight);
+		color: var(--muted-strong);
+		margin-bottom: 6px;
+	}
+
+	.val {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		font-weight: 600;
+		letter-spacing: var(--track-label-tight);
+		color: var(--ink);
+	}
+
+	.body {
+		border-bottom: var(--rule);
+		padding: 52px var(--pad-band-lg) 56px;
+	}
+
+	@media (max-width: 1199px) {
+		.header {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.meta-col {
+			border-left: none;
+			border-top: var(--rule);
+			flex-direction: row;
+			flex-wrap: wrap;
+			gap: 32px;
+			padding: 24px var(--pad-band-lg);
+		}
+	}
+
+	@media (max-width: 759px) {
+		.crumb {
+			gap: 12px;
+			font-size: var(--fs-mono-xs);
+		}
+		.title-col {
+			padding: 28px var(--pad-band) 24px;
+		}
+		.meta-col {
+			padding: 20px var(--pad-band);
+			gap: 20px;
+		}
+		.body {
+			padding: 28px var(--pad-band) 32px;
+		}
+	}
+</style>

@@ -1,0 +1,79 @@
+---
+import NewsletterBlock from '@/components/NewsletterBlock.astro';
+import SpecStrip from '@/components/SpecStrip.astro';
+import TopicCard from '@/components/TopicCard.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { TOPICS, UI } from '@/config/site';
+import { nuggetsByTopic } from '@/lib/nuggets';
+
+const counts = new Map<string, number>();
+for (const topic of TOPICS) {
+	counts.set(topic.id, (await nuggetsByTopic(topic.id)).length);
+}
+---
+
+<BaseLayout
+	title="Themen"
+	description="Die drei Themen dieses Blogs: Digitalisierung im HR, KI & Daten im HR und moderne HR-Organisation."
+	active="themen"
+>
+	<SpecStrip back={{ href: '/', label: UI.backHome }} items={['THEMEN']} accent="DREI STRÄNGE" />
+
+	<div class="head">
+		<h1>Themen</h1>
+		<p>Drei Stränge, an denen ich mich abarbeite. Sie hängen enger zusammen, als es aussieht.</p>
+	</div>
+
+	<div class="topics">
+		{TOPICS.map((topic) => <TopicCard topic={topic} count={counts.get(topic.id) ?? 0} />)}
+	</div>
+
+	<NewsletterBlock />
+</BaseLayout>
+
+<style>
+	.head {
+		border-bottom: var(--rule);
+		padding: 48px var(--pad-band-lg);
+	}
+
+	h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--fs-h1);
+		line-height: 1;
+		letter-spacing: var(--track-display);
+		margin-bottom: 14px;
+	}
+
+	.head p {
+		font-size: var(--fs-dek);
+		color: var(--body-soft);
+		max-width: 640px;
+	}
+
+	.topics {
+		border-bottom: var(--rule);
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+	.topics > :global(*:not(:last-child)) {
+		border-right: var(--rule);
+	}
+
+	@media (max-width: 979px) {
+		.topics {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.topics > :global(*:not(:last-child)) {
+			border-right: none;
+			border-bottom: var(--rule);
+		}
+	}
+
+	@media (max-width: 759px) {
+		.head {
+			padding: 28px var(--pad-band);
+		}
+	}
+</style>

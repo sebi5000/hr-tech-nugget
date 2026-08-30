@@ -1,0 +1,115 @@
+---
+import ArchiveRow from '@/components/ArchiveRow.astro';
+import { UI } from '@/config/site';
+import type { Nugget } from '@/lib/nuggets';
+
+interface Props {
+	nuggets: Nugget[];
+	/** Shown instead of the column header row below 760px. */
+	label?: string;
+	footer?: { href: string; label: string } | undefined;
+}
+
+const { nuggets, label = UI.archive, footer } = Astro.props;
+---
+
+<div class="table">
+	<div class="head" aria-hidden="true">
+		<span>{UI.colNumber}</span>
+		<span>{UI.colDate}</span>
+		<span>{UI.colTitle}</span>
+		<span class="c-topic">{UI.colTopic}</span>
+		<span class="c-time">{UI.colTime}</span>
+	</div>
+
+	<div class="band-label">{label}</div>
+
+	{
+		nuggets.map((nugget, i) => (
+			<ArchiveRow nugget={nugget} last={i === nuggets.length - 1 && !footer} />
+		))
+	}
+
+	{
+		footer && (
+			<div class="footer">
+				<a href={footer.href}>{footer.label}</a>
+			</div>
+		)
+	}
+</div>
+
+<style>
+	.table {
+		border-bottom: var(--rule);
+	}
+
+	.head {
+		padding: 20px var(--pad-band);
+		border-bottom: var(--rule);
+		display: grid;
+		grid-template-columns: 60px 120px minmax(0, 1fr) 240px 90px;
+		gap: 24px;
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		font-weight: 600;
+		letter-spacing: var(--track-label-wide);
+		color: var(--muted-strong);
+	}
+
+	.c-time {
+		text-align: right;
+	}
+
+	/* The mobile stand-in for the column header. */
+	.band-label {
+		display: none;
+		padding: 14px var(--pad-band);
+		border-bottom: var(--rule);
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-xs);
+		font-weight: 600;
+		letter-spacing: var(--track-label-wide);
+		color: var(--muted-strong);
+	}
+
+	.footer {
+		padding: 18px var(--pad-band);
+		text-align: center;
+	}
+
+	.footer a {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: var(--track-label);
+		color: var(--ink);
+		text-decoration: none;
+	}
+	.footer a:hover {
+		color: var(--accent);
+		text-decoration: underline;
+	}
+
+	@media (max-width: 979px) {
+		.head {
+			grid-template-columns: 60px 120px minmax(0, 1fr) 90px;
+			gap: 16px;
+		}
+		.c-topic {
+			display: none;
+		}
+	}
+
+	@media (max-width: 759px) {
+		.head {
+			display: none;
+		}
+		.band-label {
+			display: block;
+		}
+		.footer a {
+			font-size: var(--fs-mono-sm);
+		}
+	}
+</style>

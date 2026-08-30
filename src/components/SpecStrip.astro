@@ -1,0 +1,72 @@
+---
+/**
+ * The mono metadata strip under the top bar.
+ *
+ * `back` is REQUIRED, not optional. `null` is only legal on the home page.
+ * That turns the standing back-navigation rule into something `astro check`
+ * catches, instead of a UX regression nobody notices.
+ */
+
+interface Props {
+	back: { href: string; label: string } | null;
+	items?: string[];
+	accent?: string | undefined;
+}
+
+const { back, items = [], accent } = Astro.props;
+---
+
+<div class="strip">
+	{back && <a class="back" href={back.href}>{back.label}</a>}
+	{items.map((item) => <span>{item}</span>)}
+	{accent && <span class="accent">{accent}</span>}
+</div>
+
+<style>
+	.strip {
+		border-bottom: var(--rule);
+		padding: 14px var(--pad-band);
+		display: flex;
+		gap: 40px;
+		align-items: center;
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		font-weight: 500;
+		letter-spacing: var(--track-label);
+		color: var(--muted-strong);
+	}
+
+	.back {
+		color: var(--ink);
+		text-decoration: none;
+	}
+	.back:hover {
+		color: var(--accent);
+		text-decoration: underline;
+	}
+
+	.accent {
+		margin-left: auto;
+		color: var(--accent);
+	}
+
+	@media (max-width: 759px) {
+		.strip {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 6px;
+			font-size: var(--fs-mono-xs);
+			padding: 8px var(--pad-band) 12px;
+		}
+		.accent {
+			margin-left: 0;
+		}
+		/* The back link is the navigation rule made visible — give it a real target. */
+		.back {
+			display: inline-flex;
+			align-items: center;
+			min-height: 44px;
+			font-size: var(--fs-mono-sm);
+		}
+	}
+</style>

@@ -1,0 +1,55 @@
+---
+import { FOOTER_LINKS, SITE, UI } from '@/config/site';
+---
+
+<div class="colophon">
+	<span>&copy; {SITE.establishedYear} {SITE.author.toUpperCase()} &mdash; {UI.allViewsMyOwn}</span>
+	<div class="links">
+		{FOOTER_LINKS.map((link) => <a href={link.href}>{link.label}</a>)}
+	</div>
+</div>
+
+<style>
+	.colophon {
+		padding: 0 var(--frame-margin) var(--frame-margin);
+		display: flex;
+		justify-content: space-between;
+		gap: var(--pad-band);
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		letter-spacing: var(--track-label-tight);
+		color: var(--muted);
+	}
+
+	.links {
+		display: flex;
+		gap: 28px;
+	}
+
+	.colophon a {
+		color: var(--muted);
+		text-decoration: none;
+	}
+	.colophon a:hover {
+		color: var(--accent);
+		text-decoration: underline;
+	}
+
+	@media (max-width: 759px) {
+		.colophon {
+			flex-direction: column-reverse;
+			gap: 10px;
+			font-size: var(--fs-mono-xs);
+		}
+		.links {
+			gap: 4px 20px;
+			flex-wrap: wrap;
+		}
+		.colophon a {
+			display: inline-flex;
+			align-items: center;
+			min-height: 44px;
+			font-size: var(--fs-mono-sm);
+		}
+	}
+</style>

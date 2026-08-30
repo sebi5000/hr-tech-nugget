@@ -1,0 +1,54 @@
+---
+import { Font } from 'astro:assets';
+import Colophon from '@/components/Colophon.astro';
+import DocumentFrame from '@/components/DocumentFrame.astro';
+import Seo from '@/components/Seo.astro';
+import TopBar from '@/components/TopBar.astro';
+import { SITE, UI, type NavKey } from '@/config/site';
+import '@/styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string | undefined;
+	active?: NavKey | undefined;
+	type?: 'website' | 'article';
+	publishedTime?: Date | undefined;
+}
+
+const { title, description, active, type = 'website', publishedTime } = Astro.props;
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<meta name="generator" content={Astro.generator} />
+
+		<Font cssVariable="--font-display" preload />
+		<Font cssVariable="--font-mono" preload />
+		<Font cssVariable="--font-body" preload />
+
+		<Seo
+			title={title}
+			description={description ?? SITE.description}
+			type={type}
+			publishedTime={publishedTime}
+		/>
+	</head>
+
+	<body>
+		<a class="skip-link" href="#main">{UI.skipToContent}</a>
+
+		<TopBar active={active} />
+
+		<main id="main">
+			<DocumentFrame>
+				<slot />
+			</DocumentFrame>
+		</main>
+
+		<Colophon />
+	</body>
+</html>

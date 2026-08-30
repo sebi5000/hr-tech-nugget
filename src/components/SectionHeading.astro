@@ -1,0 +1,35 @@
+---
+/**
+ * Mapped onto `h2` in MDX so authors write plain `## Überschrift` and get the
+ * design's rule bar and `01 —` prefix. The number comes from a CSS counter, so
+ * sections renumber themselves when reordered.
+ */
+---
+
+<h2 class="section-heading"><slot /></h2>
+
+<style is:global>
+	.prose {
+		counter-reset: fig section;
+	}
+
+	.prose > .section-heading {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--fs-h2-section);
+		line-height: var(--lh-heading);
+		letter-spacing: var(--track-display-soft);
+		margin: 44px 0 20px;
+		padding-top: 22px;
+		border-top: var(--rule);
+	}
+
+	.prose > .section-heading::before {
+		counter-increment: section;
+		content: counter(section, decimal-leading-zero) ' — ';
+	}
+
+	.prose > .section-heading:first-child {
+		margin-top: 0;
+	}
+</style>

@@ -1,0 +1,14 @@
+---
+// The 2px bordered container every page lives inside.
+---
+
+<div class="frame">
+	<slot />
+</div>
+
+<style>
+	.frame {
+		margin: var(--frame-margin);
+		border: var(--rule);
+	}
+</style>

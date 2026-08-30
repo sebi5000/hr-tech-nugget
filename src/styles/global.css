@@ -1,0 +1,113 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	background: var(--paper);
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--font-body);
+	font-size: var(--fs-base);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote {
+	margin: 0;
+}
+
+img,
+svg {
+	max-width: 100%;
+}
+
+a {
+	color: var(--accent);
+	text-decoration: none;
+}
+
+a:hover {
+	color: var(--accent-hover);
+	text-decoration: underline;
+}
+
+::selection {
+	background: var(--selection);
+}
+
+input::placeholder {
+	color: var(--muted);
+	opacity: 1;
+}
+
+/*
+ * Focus. The mockups define :hover everywhere and :focus nowhere, on pages that
+ * are almost entirely links. Every interactive element gets a visible ring.
+ */
+:focus-visible {
+	outline: var(--focus-ring);
+	outline-offset: var(--focus-offset);
+}
+
+/* On the black bands the cobalt ring is too dark to see. */
+.on-dark :focus-visible {
+	outline-color: var(--accent-bright);
+}
+
+.skip-link {
+	position: absolute;
+	left: -9999px;
+	top: 0;
+	z-index: 100;
+	background: var(--ink);
+	color: var(--on-dark);
+	font-family: var(--font-mono);
+	font-size: var(--fs-mono-sm);
+	font-weight: 600;
+	letter-spacing: var(--track-label);
+	padding: 15px 20px;
+	min-height: 44px;
+}
+
+.skip-link:focus {
+	left: 0;
+	text-decoration: none;
+	color: var(--on-dark);
+}
+
+/* Shared: the monospace uppercase label that carries the whole aesthetic. */
+.mono-label {
+	font-family: var(--font-mono);
+	font-size: var(--fs-mono-sm);
+	font-weight: 600;
+	letter-spacing: var(--track-label);
+	text-transform: uppercase;
+	color: var(--muted-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}

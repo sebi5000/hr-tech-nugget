@@ -1,0 +1,293 @@
+---
+import Monogram from '@/components/Monogram.astro';
+import NewsletterBlock from '@/components/NewsletterBlock.astro';
+import SpecStrip from '@/components/SpecStrip.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { SITE, TOPICS, UI } from '@/config/site';
+---
+
+<BaseLayout
+	title="Über mich"
+	description={`${SITE.author} — ${SITE.authorRole} bei ${SITE.authorCompany}. Schreibt über Digitalisierung, KI und Daten im HR.`}
+	active="ueber"
+>
+	<SpecStrip
+		back={{ href: '/', label: UI.backHome }}
+		items={['ÜBER MICH']}
+		accent="DIE PERSON HINTER DEN NUGGETS"
+	/>
+
+	<div class="hero">
+		<div class="portrait">
+			<Monogram size={120} />
+		</div>
+		<div class="intro">
+			<h1>{SITE.author}</h1>
+			<p>
+				Ich verantworte die IT für HR-Transformation bei {SITE.authorCompany}, einer Beratung für SAP
+				SuccessFactors. Hier schreibe ich auf, was in keine Projektpräsentation passt.
+			</p>
+		</div>
+	</div>
+
+	<div class="body">
+		<div class="bio">
+			<p>
+				Tagsüber führe ich HR-IT-Programme &mdash; überwiegend SAP-SuccessFactors-Einführungen,
+				Plattformen für Mitarbeiterdaten und die KI-Piloten, die alle wollen und über die die halbe
+				Organisation still besorgt ist. Früh am Morgen, bevor das alles losgeht, schreibe ich diesen
+				Blog.
+			</p>
+			<p>
+				&bdquo;HR Tech Nugget&ldquo; ist der Ort für die Digitalisierungsentscheidungen, die klein
+				aussehen und es nicht sind, für die Frage, wofür KI im HR heute wirklich taugt und was noch
+				Marketing ist, und dafür, warum so viele Initiativen für eine moderne HR-Organisation
+				irgendwo beim Organigramm stillschweigend hängen bleiben.
+			</p>
+			<p>
+				Ich schreibe das, weil das meiste über HR-Technologie von Leuten veröffentlicht wird, die sie
+				verkaufen. Ich verkaufe hier nichts. Manche dieser Nuggets sind Schlussfolgerungen; die
+				meisten sind eher lautes Nachdenken über etwas, das mir ein Projekt gerade auf die harte Tour
+				beigebracht hat.
+			</p>
+			<p class="last">
+				Alles hier ist meine persönliche Sicht, nicht die meines Arbeitgebers. Wenn du mit denselben
+				Fragen ringst, höre ich gern von dir.
+			</p>
+		</div>
+
+		<aside class="sheet">
+			<div class="sheet-head">{UI.shortVersion}</div>
+
+			<div class="row">
+				<p class="key">ROLLE</p>
+				<p class="val">{SITE.authorRole}</p>
+			</div>
+
+			<div class="row">
+				<p class="key">UNTERNEHMEN</p>
+				<p class="val">{SITE.authorCompany}</p>
+			</div>
+
+			<div class="row">
+				<p class="key">ARBEITET AN</p>
+				<p class="val">SAP SuccessFactors, Plattformen für Mitarbeiterdaten, KI-Piloten im HR</p>
+			</div>
+
+			<div class="row">
+				<p class="key">SCHREIBT ÜBER</p>
+				<div class="tags">
+					{TOPICS.map((topic) => <span class="tag">{topic.short}</span>)}
+				</div>
+			</div>
+
+			<div class="row last">
+				<p class="key">SCHREIBT SEIT</p>
+				<p class="val">{SITE.establishedYear}</p>
+			</div>
+		</aside>
+	</div>
+
+	<div class="contact">
+		<div>
+			<h2>An denselben Problemen dran?</h2>
+			<p>Ich lese alles &mdash; und antworte auf das meiste.</p>
+		</div>
+		<div class="buttons">
+			<a class="btn" href="mailto:[DEINE E-MAIL]">[DEINE E-MAIL]</a>
+			<a class="btn" href={SITE.linkedinUrl}>[LINKEDIN-URL] &#8599;</a>
+		</div>
+	</div>
+
+	<NewsletterBlock />
+</BaseLayout>
+
+<style>
+	.hero {
+		border-bottom: var(--rule);
+		display: grid;
+		grid-template-columns: 200px minmax(0, 1fr);
+	}
+
+	.portrait {
+		border-right: var(--rule);
+		padding: 44px var(--pad-band);
+		display: flex;
+		align-items: flex-start;
+	}
+
+	.intro {
+		padding: 44px var(--pad-band-lg);
+	}
+
+	h1 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: var(--fs-h1);
+		line-height: 1;
+		letter-spacing: var(--track-display);
+		margin-bottom: 18px;
+	}
+
+	.intro p {
+		font-size: var(--fs-dek);
+		line-height: 1.55;
+		color: var(--body-soft);
+		max-width: 680px;
+	}
+
+	.body {
+		border-bottom: var(--rule);
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 380px;
+	}
+
+	.bio {
+		padding: var(--pad-band-lg);
+	}
+
+	.bio p {
+		font-family: var(--font-display);
+		font-weight: 500;
+		font-size: var(--fs-dek);
+		line-height: 1.7;
+		color: var(--body);
+		margin-bottom: 22px;
+	}
+	.bio p.last {
+		margin-bottom: 0;
+	}
+
+	.sheet {
+		border-left: var(--rule);
+	}
+
+	.sheet-head {
+		border-bottom: var(--rule);
+		padding: 16px 28px;
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		font-weight: 600;
+		letter-spacing: var(--track-label-wide);
+		color: var(--muted-strong);
+	}
+
+	.row {
+		border-bottom: var(--rule-hair);
+		padding: 20px 28px;
+	}
+	.row.last {
+		border-bottom: none;
+	}
+
+	.key {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-xs);
+		letter-spacing: var(--track-label-wide);
+		color: var(--muted);
+		margin-bottom: 7px;
+	}
+
+	.val {
+		font-size: var(--fs-base);
+		font-weight: 500;
+		line-height: 1.5;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 4px;
+	}
+
+	.tag {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-xs);
+		letter-spacing: 0.04em;
+		border: var(--rule);
+		padding: 6px 10px;
+	}
+
+	.contact {
+		border-bottom: var(--rule);
+		padding: 40px var(--pad-band-lg);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--pad-band);
+		flex-wrap: wrap;
+	}
+
+	h2 {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 26px;
+		line-height: var(--lh-heading);
+		margin-bottom: 8px;
+	}
+
+	.contact p {
+		font-size: var(--fs-base);
+		color: var(--muted-strong);
+	}
+
+	.buttons {
+		display: flex;
+		gap: 14px;
+		flex-wrap: wrap;
+	}
+
+	.btn {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 600;
+		letter-spacing: var(--track-label-tight);
+		border: var(--rule);
+		color: var(--ink);
+		padding: 15px 24px;
+		text-decoration: none;
+	}
+	.btn:hover {
+		background: var(--ink);
+		color: var(--on-dark);
+		text-decoration: none;
+	}
+
+	@media (max-width: 979px) {
+		.body {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.sheet {
+			border-left: none;
+			border-top: var(--rule);
+		}
+	}
+
+	@media (max-width: 759px) {
+		.hero {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.portrait {
+			border-right: none;
+			border-bottom: var(--rule);
+			padding: 24px var(--pad-band);
+		}
+		.intro {
+			padding: 28px var(--pad-band);
+		}
+		.bio {
+			padding: 28px var(--pad-band);
+		}
+		.contact {
+			padding: 28px var(--pad-band);
+		}
+		.buttons {
+			width: 100%;
+		}
+		.btn {
+			flex-grow: 1;
+			text-align: center;
+		}
+	}
+</style>

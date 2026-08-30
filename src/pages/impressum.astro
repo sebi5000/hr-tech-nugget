@@ -1,0 +1,61 @@
+---
+import LegalLayout from '@/layouts/LegalLayout.astro';
+import { SITE } from '@/config/site';
+---
+
+<LegalLayout
+	title="Impressum"
+	description="Anbieterkennzeichnung nach § 5 DDG."
+	label="IMPRESSUM"
+	accent="§ 5 DDG"
+>
+	<p class="notice">
+		AUSZUFÜLLEN VOR VERÖFFENTLICHUNG. Die mit [ ] markierten Felder müssen durch echte Angaben
+		ersetzt werden — ein unvollständiges Impressum ist abmahnfähig. Diese Seite ist eine Vorlage und
+		ersetzt keine Rechtsberatung.
+	</p>
+
+	<h2>Angaben gemäß § 5 DDG</h2>
+	<p>
+		{SITE.author}<br />
+		<span class="todo">[STRASSE UND HAUSNUMMER]</span><br />
+		<span class="todo">[PLZ UND ORT]</span><br />
+		Deutschland
+	</p>
+
+	<h2>Kontakt</h2>
+	<p>
+		E-Mail: <span class="todo">[DEINE E-MAIL-ADRESSE]</span><br />
+		Telefon: <span class="todo">[OPTIONAL — TELEFONNUMMER]</span>
+	</p>
+
+	<h2>Verantwortlich für den Inhalt</h2>
+	<p>
+		{SITE.author}, Anschrift wie oben.
+	</p>
+
+	<h2>Umsatzsteuer-Identifikationsnummer</h2>
+	<p>
+		<span class="todo">[UST-IDNR. ODER: ENTFÄLLT, DA REIN PRIVATES ANGEBOT]</span>
+	</p>
+
+	<h2>Hinweis zur Tätigkeit</h2>
+	<p>
+		Dieser Blog ist ein privates Angebot. Die hier veröffentlichten Beiträge geben ausschließlich
+		meine persönliche Auffassung wieder und nicht die Position meines Arbeitgebers.
+	</p>
+
+	<h2>Streitschlichtung</h2>
+	<p>
+		Ich bin nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer
+		Verbraucherschlichtungsstelle teilzunehmen.
+	</p>
+
+	<h2>Haftung für Links</h2>
+	<p>
+		Dieses Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen Einfluss
+		habe. Für diese fremden Inhalte kann ich keine Gewähr übernehmen; verantwortlich ist stets der
+		jeweilige Anbieter oder Betreiber der Seiten. Bei Bekanntwerden von Rechtsverletzungen werden
+		derartige Links umgehend entfernt.
+	</p>
+</LegalLayout>

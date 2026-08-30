@@ -1,0 +1,31 @@
+---
+/**
+ * A margin note. Written in MDX immediately after the block it annotates —
+ * CSS Grid auto-placement lands it in that block's row, so it top-aligns
+ * automatically with no offsets. Below the note-gutter breakpoint the grid
+ * collapses and the note falls inline exactly where it sits in the source.
+ */
+---
+
+<aside class="note">
+	<slot />
+</aside>
+
+<style>
+	.note {
+		font-family: var(--font-mono);
+		font-size: var(--fs-mono-sm);
+		line-height: 1.6;
+		letter-spacing: 0.02em;
+		color: var(--muted-strong);
+		border-left: 2px solid var(--accent);
+		padding-left: 14px;
+	}
+
+	@media (max-width: 1199px) {
+		.note {
+			margin: 0 0 26px;
+			padding: 4px 0 4px 14px;
+		}
+	}
+</style>

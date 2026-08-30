@@ -1,0 +1,47 @@
+---
+import type { TopicId } from '@/config/site';
+
+interface Props {
+	topic: TopicId;
+	size?: number;
+}
+
+const { topic, size = 28 } = Astro.props;
+---
+
+<svg
+	width={size}
+	height={size}
+	viewBox="0 0 28 28"
+	fill="none"
+	stroke="currentColor"
+	stroke-width="2"
+	aria-hidden="true"
+>
+	{
+		topic === 'digitalisierung' && (
+			<>
+				<rect x="1" y="1" width="26" height="26" />
+				<path d="M1 14h26M14 1v26" />
+			</>
+		)
+	}
+	{
+		topic === 'ki-daten' && (
+			<>
+				<circle cx="14" cy="5" r="3" />
+				<circle cx="5" cy="23" r="3" />
+				<circle cx="23" cy="23" r="3" />
+				<path d="M14 8L5.8 20.5M14 8L22.2 20.5M8 23h12" />
+			</>
+		)
+	}
+	{
+		topic === 'organisation' && (
+			<>
+				<path d="M14 1L27 14L14 27L1 14Z" />
+				<path d="M14 8.5L19.5 14L14 19.5L8.5 14Z" />
+			</>
+		)
+	}
+</svg>
