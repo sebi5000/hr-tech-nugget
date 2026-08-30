@@ -37,7 +37,7 @@ Details und die Regeln des Projekts stehen in [AGENTS.md](AGENTS.md).
 
 ---
 
-## Vor dem Livegang — offene Punkte
+## Offene Punkte vor der Bekanntgabe
 
 ### 1. Den OWNER-Block ausfüllen
 
@@ -78,38 +78,47 @@ Datenschutzerklärung sagt zu, dass es aktiv ist.
 Die Action-URL des Formulars wird aus `buttondownUser` gebaut. Vergleiche sie
 einmal mit dem Embed-Snippet in deinem Dashboard.
 
-### 3. Deployment auf Cloudflare Pages
+### 3. Newsletter live testen
 
-Das Repository liegt bereits auf GitHub:
-<https://github.com/sebi5000/hr-tech-nugget>
+Nach dem Ausfüllen von `buttondownUser` einmal echt im Formular eintragen. Das
+beweist auf einen Schlag, dass die CSP den POST zulässt, der Buttondown-Name
+stimmt und das Double-Opt-in ankommt.
 
-Im Cloudflare-Dashboard: **Workers & Pages → Create → Pages → Connect to Git**,
-dieses Repo auswählen.
+---
 
-| Einstellung      | Wert         |
-| ---------------- | ------------ |
-| Framework preset | Astro        |
-| Build command    | `pnpm build` |
-| Output directory | `dist`       |
+## Deployment (steht bereits)
 
-Die Node-Version steht in `.node-version` (22.16.0) und wird von Cloudflare
-automatisch gelesen — es ist **keine** `NODE_VERSION`-Umgebungsvariable nötig.
-pnpm wird an der `pnpm-lock.yaml` erkannt.
+Läuft auf Cloudflare Pages, Projekt `hr-tech-nugget`, verbunden mit dem
+GitHub-Repo <https://github.com/sebi5000/hr-tech-nugget>.
+
+**Jeder Push auf `main` deployt automatisch.** Pull Requests bekommen eine
+Preview-URL als Kommentar.
+
+| Einstellung      | Wert                                   |
+| ---------------- | -------------------------------------- |
+| Build command    | `pnpm build` (führt `astro check` mit) |
+| Output directory | `dist`                                 |
+| Node             | `.node-version` → 22.16.0              |
+| Paketmanager     | pnpm, erkannt an `pnpm-lock.yaml`      |
+
+Weil `pnpm build` mit `astro check` startet, bricht ein Typfehler den Deploy ab,
+statt ihn live zu stellen.
+
+### Domains
+
+| Host                       | Verhalten                     |
+| -------------------------- | ----------------------------- |
+| `hr-tech-nugget.org`       | kanonisch, serviert die Seite |
+| `www.hr-tech-nugget.org`   | 301 auf die Apex-Domain       |
+| `hr-tech-nugget.pages.dev` | Cloudflare-Standarddomain     |
+
+DNS sind proxied CNAMEs auf `hr-tech-nugget.pages.dev`; die Apex-Domain nutzt
+CNAME-Flattening. Der www-Redirect ist eine Single-Redirect-Rule in der Zone.
+
+Bei einem Domainwechsel: `site:` in `astro.config.mjs`, `url` in
+`src/config/site.ts` und die Sitemap-URL in `public/robots.txt` anpassen — alle
+drei werden zur Build-Zeit in Canonicals, RSS, OG-Tags und Sitemap eingebacken.
 
 Nur **einen** Deploy-Weg verwenden. Git-Integration _und_ ein
 Wrangler-GitHub-Action gleichzeitig erzeugen doppelte Deployments, die um den
 Produktions-Branch konkurrieren.
-
-### 4. Eigene Domain (später)
-
-`site:` in `astro.config.mjs` und die Sitemap-URL in `public/robots.txt`
-anpassen. Beide werden zur Build-Zeit in RSS, Sitemap und Canonicals eingebacken.
-
-### 5. Nach dem ersten Deploy prüfen
-
-```bash
-curl -sI https://hr-tech-nugget.org/ | grep -i "content-security\|referrer"
-```
-
-Und einmal echt im Newsletter-Formular eintragen: Das beweist, dass die CSP den
-POST zulässt, der Buttondown-Name stimmt und das Double-Opt-in ankommt.
