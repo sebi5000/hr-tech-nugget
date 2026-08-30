@@ -16,7 +16,7 @@ export const SITE = {
 	description:
 		'Notizen aus der Praxis zu Digitalisierung im HR, KI & Daten und dem Umbau zu einer modernen HR-Organisation.',
 	thesis:
-		'Die meisten HR-Transformationen scheitern an derselben Stelle: Die Technik geht live, die Organisation bewegt sich nicht.',
+		'Wie alle Funktionen im KI-Zeitalter, wird auch die HR-Funktion massivem und schnellem Wandel ausgesetzt sein. Das bietet Raum für Gestaltung und die Schaffung von Alleinstellungsmerkmalen.',
 	establishedYear: 2026,
 } as const;
 
