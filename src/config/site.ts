@@ -31,8 +31,8 @@ export const SITE = {
 export const OWNER = {
 	/** Buttondown newsletter username, from your Buttondown dashboard. */
 	buttondownUser: '',
-	email: '',
-	linkedinUrl: '',
+	email: 'sebastian.essling@mindsquare.de',
+	linkedinUrl: 'https://www.linkedin.com/in/sebastian-essling/',
 	street: '',
 	postalCity: '',
 	country: 'Deutschland',
@@ -81,21 +81,21 @@ export const TOPICS: readonly Topic[] = [
 		order: '01',
 		title: 'Digitalisierung im HR',
 		short: 'DIGITALISIERUNG',
-		dek: 'Raus aus Tabellen und E-Mail-Postfächern — und vorbei an der Falle, alte Prozesse bloß zu digitalisieren.',
+		dek: 'Wie können wir HR besser digitalisieren?',
 	},
 	{
 		id: 'ki-daten',
 		order: '02',
 		title: 'KI & Daten im HR',
 		short: 'KI & DATEN IM HR',
-		dek: 'Was KI heute wirklich für HR-Teams leistet, und auf welchem Datenfundament das still und leise aufbaut.',
+		dek: 'Wie HR von KI und Daten profitieren kann',
 	},
 	{
 		id: 'organisation',
 		order: '03',
-		title: 'Moderne HR-Organisation',
+		title: 'Moderne HR-Organisation & Strategie',
 		short: 'MODERNE HR-ORG',
-		dek: 'Strukturen, Rollen und Arbeitsweisen neu denken — nicht nur den Tech-Stack darunter.',
+		dek: 'Strukturen, Rollen und Arbeitsweisen neu denken',
 	},
 ] as const;
 

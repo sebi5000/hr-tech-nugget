@@ -9,11 +9,7 @@ import { allNuggets } from '@/lib/nuggets';
 const nuggets = await allNuggets();
 ---
 
-<BaseLayout
-	title="Alle Nuggets"
-	description="Das vollständige Archiv: Notizen aus der Praxis zu Digitalisierung im HR, KI & Daten und moderner HR-Organisation."
-	active="nuggets"
->
+<BaseLayout title="Alle Nuggets" description="Das vollständige Archiv" active="nuggets">
 	<SpecStrip
 		back={{ href: '/', label: UI.backHome }}
 		items={['ARCHIV']}

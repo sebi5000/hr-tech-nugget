@@ -8,7 +8,7 @@ import { OWNER, SITE, TOPICS, UI } from '@/config/site';
 
 <BaseLayout
 	title="Über mich"
-	description={`${SITE.author} — ${SITE.authorRole} bei ${SITE.authorCompany}. Schreibt über Digitalisierung, KI und Daten im HR.`}
+	description={`${SITE.author} — ${SITE.authorRole} bei ${SITE.authorCompany}. Schreibt über die Digitalisierung des Personalwesens in deutschen Organisationen.`}
 	active="ueber"
 >
 	<SpecStrip
@@ -24,8 +24,9 @@ import { OWNER, SITE, TOPICS, UI } from '@/config/site';
 		<div class="intro">
 			<h1>{SITE.author}</h1>
 			<p>
-				Ich verantworte die IT für HR-Transformation bei {SITE.authorCompany}, einer Beratung für
-				SAP SuccessFactors. Hier schreibe ich auf, was in keine Projektpräsentation passt.
+				Als Partner der {SITE.authorCompany}, verantworte ich die Beratungseinheit zur
+				Digitalisierung des Personalwesens. Auf diesem privaten Blog schreibe ich Learnings,
+				Meinungen und Erfahrungen, um Wissen weiterzugeben und selbst etwas zu lernen.
 			</p>
 		</div>
 	</div>
@@ -33,26 +34,25 @@ import { OWNER, SITE, TOPICS, UI } from '@/config/site';
 	<div class="body">
 		<div class="bio">
 			<p>
-				Tagsüber führe ich HR-IT-Programme &mdash; überwiegend SAP-SuccessFactors-Einführungen,
-				Plattformen für Mitarbeiterdaten und die KI-Piloten, die alle wollen und über die die halbe
-				Organisation still besorgt ist. Früh am Morgen, bevor das alles losgeht, schreibe ich diesen
-				Blog.
+				Als Wirtschaftsinformatiker und gelernter Softwareentwickler / Engineer bin ich von Herzen
+				Techi. Noch immer beschäftige ich mich neben dem Berufsalltag mit neuen Programmiersprachen,
+				Frameworks und Technologien, auch über HR hinaus.
 			</p>
 			<p>
-				&bdquo;HR Tech Nugget&ldquo; ist der Ort für die Digitalisierungsentscheidungen, die klein
-				aussehen und es nicht sind, für die Frage, wofür KI im HR heute wirklich taugt und was noch
-				Marketing ist, und dafür, warum so viele Initiativen für eine moderne HR-Organisation
-				irgendwo beim Organigramm stillschweigend hängen bleiben.
+				&bdquo;HR Tech Nugget&ldquo; ist der Ort an dem ich Neuheiten, Markterkenntnisse oder
+				Erfahrungen teile und darauf Blicke, wie die rasanten Veränderungen in der IT Welt nutzen
+				für HR stiften können. Das kann von strategischen Fragestellungen, bis zu Kleinteiligen
+				Technologien alles sein.
 			</p>
 			<p>
-				Ich schreibe das, weil das meiste über HR-Technologie von Leuten veröffentlicht wird, die
-				sie verkaufen. Ich verkaufe hier nichts. Manche dieser Nuggets sind Schlussfolgerungen; die
-				meisten sind eher lautes Nachdenken über etwas, das mir ein Projekt gerade auf die harte
-				Tour beigebracht hat.
+				Diese Seite ist ein privates Spaßprojekt und nicht an wirtschaftliche Ziele oder Interessen
+				geknüpft. Die Veröffentlichung ist daher unregelmäßig, mein Fokus liegt aber immer auf der
+				Schaffung von Mehrwert.
 			</p>
 			<p class="last">
-				Alles hier ist meine persönliche Sicht, nicht die meines Arbeitgebers. Wenn du mit denselben
-				Fragen ringst, höre ich gern von dir.
+				Alles hier ist meine persönliche Sicht. Keine Texte sind KI generiert oder bearbeitet.
+				Ausschließlich Bilder können KI optimiert sein, werden dann aber gekennzeichnet. Die Seite
+				selbst wurde mit Unterstützung von Claude Code erstellt.
 			</p>
 		</div>
 
@@ -67,11 +67,6 @@ import { OWNER, SITE, TOPICS, UI } from '@/config/site';
 			<div class="row">
 				<p class="key">UNTERNEHMEN</p>
 				<p class="val">{SITE.authorCompany}</p>
-			</div>
-
-			<div class="row">
-				<p class="key">ARBEITET AN</p>
-				<p class="val">SAP SuccessFactors, Plattformen für Mitarbeiterdaten, KI-Piloten im HR</p>
 			</div>
 
 			<div class="row">
@@ -91,7 +86,6 @@ import { OWNER, SITE, TOPICS, UI } from '@/config/site';
 	<div class="contact">
 		<div>
 			<h2>An denselben Problemen dran?</h2>
-			<p>Ich lese alles &mdash; und antworte auf das meiste.</p>
 		</div>
 		<div class="buttons">
 			{
