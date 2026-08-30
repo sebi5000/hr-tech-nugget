@@ -1,3 +1,7 @@
+# form-action erlaubt buttondown.com, obwohl der Newsletter derzeit ruht.
+# Absicht: beim Reaktivieren (buttondownUser in site.ts setzen) funktioniert das
+# Formular sofort. Ohne diese Zeile würde der POST nur in Produktion still
+# blockiert — der Fehler, den man lokal nie sieht.
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

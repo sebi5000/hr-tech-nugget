@@ -1,7 +1,7 @@
 ---
 import Fill from '@/components/Fill.astro';
 import LegalLayout from '@/layouts/LegalLayout.astro';
-import { isPublishReady, missingOwnerFields, OWNER, SITE } from '@/config/site';
+import { isPublishReady, missingOwnerFields, NEWSLETTER_ENABLED, OWNER, SITE } from '@/config/site';
 
 const ready = isPublishReady();
 const missing = missingOwnerFields();
@@ -36,7 +36,11 @@ const missing = missingOwnerFields();
 		Diese Website setzt <strong>keine Cookies</strong>, bindet <strong>kein Analyse-Werkzeug</strong
 		>
 		ein und lädt <strong>keine Inhalte von Drittanbietern</strong> nach. Personenbezogene Daten verarbeite
-		ich nur, wenn du dich aktiv für den Newsletter anmeldest oder mir schreibst.
+		ich nur, {
+			NEWSLETTER_ENABLED
+				? 'wenn du dich aktiv für den Newsletter anmeldest oder mir schreibst'
+				: 'wenn du mir schreibst'
+		}.
 	</p>
 
 	<h2>Hosting</h2>
@@ -54,23 +58,29 @@ const missing = missingOwnerFields();
 		<strong>keine Verbindung zu Google Fonts</strong> und es wird keine IP-Adresse an Google übermittelt.
 	</p>
 
-	<h2>Newsletter</h2>
-	<p>
-		Für den Newsletter nutze ich Buttondown (Buttondown, LLC, USA). Wenn du dich anmeldest, wird
-		deine E-Mail-Adresse an Buttondown übermittelt und dort gespeichert. Die Anmeldung erfolgt im
-		<strong>Double-Opt-in-Verfahren</strong>: Du erhältst zunächst eine Bestätigungsmail und bist
-		erst nach deiner Bestätigung eingetragen.
-	</p>
-	<p>
-		Rechtsgrundlage ist deine Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO. Du kannst sie jederzeit
-		widerrufen — über den Abmeldelink in jeder E-Mail oder formlos an die oben genannte Adresse.
-		Nach dem Widerruf wird deine Adresse gelöscht.
-	</p>
-	<p>
-		Die Übermittlung in die USA erfolgt auf Grundlage der Standardvertragsklauseln der EU-Kommission
-		bzw. der Zertifizierung nach dem EU-US Data Privacy Framework. Bitte vor Veröffentlichung
-		prüfen, welche Grundlage Buttondown aktuell angibt.
-	</p>
+	{
+		NEWSLETTER_ENABLED && (
+			<>
+				<h2>Newsletter</h2>
+				<p>
+					Für den Newsletter nutze ich Buttondown (Buttondown, LLC, USA). Wenn du dich anmeldest,
+					wird deine E-Mail-Adresse an Buttondown übermittelt und dort gespeichert. Die Anmeldung
+					erfolgt im <strong>Double-Opt-in-Verfahren</strong>: Du erhältst zunächst eine
+					Bestätigungsmail und bist erst nach deiner Bestätigung eingetragen.
+				</p>
+				<p>
+					Rechtsgrundlage ist deine Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO. Du kannst sie
+					jederzeit widerrufen — über den Abmeldelink in jeder E-Mail oder formlos an die oben
+					genannte Adresse. Nach dem Widerruf wird deine Adresse gelöscht.
+				</p>
+				<p>
+					Die Übermittlung in die USA erfolgt auf Grundlage der Standardvertragsklauseln der
+					EU-Kommission bzw. der Zertifizierung nach dem EU-US Data Privacy Framework. Bitte vor
+					Veröffentlichung prüfen, welche Grundlage Buttondown aktuell angibt.
+				</p>
+			</>
+		)
+	}
 
 	<h2>Kontaktaufnahme</h2>
 	<p>
@@ -94,6 +104,7 @@ const missing = missingOwnerFields();
 	<h2>Änderungen</h2>
 	<p>
 		Ich passe diese Erklärung an, wenn sich die Website technisch ändert. Sollte künftig ein
-		Analyse-Werkzeug hinzukommen, wird das hier vorher ergänzt.
+		Analyse-Werkzeug{NEWSLETTER_ENABLED ? '' : ' oder ein Newsletter'} hinzukommen, wird das hier vorher
+		ergänzt.
 	</p>
 </LegalLayout>

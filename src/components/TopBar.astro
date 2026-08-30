@@ -1,5 +1,5 @@
 ---
-import { NAV, SITE, UI, type NavKey } from '@/config/site';
+import { NAV, NEWSLETTER_ENABLED, SITE, UI, type NavKey } from '@/config/site';
 
 interface Props {
 	active?: NavKey | undefined;
@@ -28,7 +28,13 @@ const { active } = Astro.props;
 				))
 			}
 		</nav>
-		<a class="subscribe" href="#newsletter">{UI.subscribe}</a>
+		{
+			NEWSLETTER_ENABLED && (
+				<a class="subscribe" href="#newsletter">
+					{UI.subscribe}
+				</a>
+			)
+		}
 	</div>
 
 	<details class="menu">
@@ -47,7 +53,13 @@ const { active } = Astro.props;
 		</summary>
 		<nav class="drawer" aria-label="Hauptnavigation">
 			{NAV.map((item) => <a href={item.href}>{item.label}</a>)}
-			<a class="drawer-sub" href="#newsletter">{UI.subscribe}</a>
+			{
+				NEWSLETTER_ENABLED && (
+					<a class="drawer-sub" href="#newsletter">
+						{UI.subscribe}
+					</a>
+				)
+			}
 		</nav>
 	</details>
 </div>

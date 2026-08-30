@@ -48,7 +48,7 @@ den man vergessen kann.
 
 ```ts
 export const OWNER = {
-  buttondownUser: '', // aus deinem Buttondown-Dashboard
+  buttondownUser: '', // leer = Newsletter ruht, siehe unten
   email: '',
   linkedinUrl: '',
   street: '',
@@ -59,30 +59,43 @@ export const OWNER = {
 };
 ```
 
-Solange ein Pflichtfeld leer ist:
+Pflicht sind `email`, `linkedinUrl`, `street`, `postalCity` und `vatId`. Solange
+eines davon leer ist, steht auf Impressum und Datenschutz ein Banner „NOCH NICHT
+VERÖFFENTLICHUNGSREIF" mit der Liste der offenen Felder, und die betroffenen
+Stellen rendern sichtbar markierte Platzhalter.
 
-- steht auf Impressum und Datenschutz ein Banner „NOCH NICHT
-  VERÖFFENTLICHUNGSREIF" mit der Liste der offenen Felder,
-- rendern die betroffenen Stellen sichtbar markierte Platzhalter,
-- ist das Newsletter-Formular **deaktiviert** statt E-Mail-Adressen ins Leere zu
-  schicken.
+`phone` und `buttondownUser` sind bewusst **keine** Pflichtfelder.
 
 **Ein unvollständiges Impressum ist abmahnfähig.** Impressum und
 Datenschutzerklärung sind Vorlagen und ersetzen keine Rechtsberatung.
 
-### 2. Double-Opt-in bei Buttondown aktivieren
+---
 
-Das ist eine Einstellung im Buttondown-Dashboard, nicht im Code — und die
-Datenschutzerklärung sagt zu, dass es aktiv ist.
+## Newsletter: ruht, jederzeit reaktivierbar
 
-Die Action-URL des Formulars wird aus `buttondownUser` gebaut. Vergleiche sie
-einmal mit dem Embed-Snippet in deinem Dashboard.
+Der Newsletter ist vollständig implementiert, aber **schlafend**. Der einzige
+Schalter ist `buttondownUser` in `src/config/site.ts`.
 
-### 3. Newsletter live testen
+Solange das Feld leer ist, gibt es **keinen** Anmeldeblock, **keinen**
+ABONNIEREN-Button und **keinen** Buttondown-Absatz in der Datenschutzerklärung —
+die Seite behauptet also keine Datenverarbeitung, die gar nicht stattfindet.
 
-Nach dem Ausfüllen von `buttondownUser` einmal echt im Formular eintragen. Das
-beweist auf einen Schlag, dass die CSP den POST zulässt, der Buttondown-Name
-stimmt und das Double-Opt-in ankommt.
+**Zum Aktivieren:**
+
+1. Bei [Buttondown](https://buttondown.com) anmelden, Newsletter-Namen wählen.
+2. Den Namen als `buttondownUser` eintragen. Die Action-URL wird daraus gebaut —
+   einmal mit dem Embed-Snippet im Dashboard vergleichen.
+3. **Double-Opt-in im Buttondown-Dashboard einschalten.** Das ist eine
+   Einstellung dort, nicht im Code — und die Datenschutzerklärung sagt zu, dass
+   es aktiv ist.
+4. Pushen. Block, Button und Datenschutz-Absatz sind mit dem nächsten Deploy da.
+5. Einmal echt eintragen. Das beweist auf einen Schlag, dass die CSP den POST
+   zulässt, der Name stimmt und das Double-Opt-in ankommt.
+
+Die CSP in `public/_headers` erlaubt `form-action https://buttondown.com`
+weiterhin, obwohl das Formular ruht — sonst würde der POST beim Reaktivieren nur
+in Produktion still blockiert. `pnpm verify` prüft beide Zustände: dass bei
+leerem Feld nichts gerendert wird, und bei gesetztem Feld alles drei da ist.
 
 ---
 

@@ -29,6 +29,21 @@ These are rules, not suggestions. Everything else is derivable from the code.
    requirement, not a performance preference.
 8. **`pnpm build` must pass `astro check` clean** (build runs check first).
 
+## The newsletter is a single switch
+
+`OWNER.buttondownUser` in `src/config/site.ts` is the only control. Empty means
+dormant: no signup block, no SUBSCRIBE button in the top bar or mobile drawer, no
+Buttondown section in the privacy policy. Everything reads `NEWSLETTER_ENABLED`
+from that one value, so the feature can never be half-on — a form without a
+username, or a privacy policy describing processing that does not happen.
+
+`buttondownUser` is deliberately **not** in `REQUIRED_OWNER_FIELDS`: the
+newsletter is a feature you may not want, not an unfinished field.
+
+The CSP in `public/_headers` keeps `form-action https://buttondown.com` while the
+newsletter is dormant, so reactivation is one value and not also a header edit.
+`pnpm verify` asserts both directions.
+
 ## Design invariants
 
 2px borders, `border-radius: 0` everywhere, monospace uppercase labels with wide

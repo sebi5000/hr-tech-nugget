@@ -1,5 +1,5 @@
 ---
-import { OWNER, UI } from '@/config/site';
+import { NEWSLETTER_ENABLED, OWNER, UI } from '@/config/site';
 
 /**
  * Buttondown embed. Deliberately a real form POST, not fetch — Buttondown may
@@ -10,35 +10,39 @@ import { OWNER, UI } from '@/config/site';
  * The CSP in public/_headers must allow `form-action https://buttondown.com`
  * or this silently fails in production.
  *
- * Until OWNER.buttondownUser is set, the form renders disabled rather than
- * POSTing into the void — a signup that silently drops addresses is worse than
- * one that visibly is not ready yet.
+ * Dormant until OWNER.buttondownUser is set: the whole block renders nothing,
+ * so no half-finished signup is ever shown. Filling in the username is the
+ * only switch — there is no second flag to forget.
  */
-const connected = OWNER.buttondownUser.trim() !== '';
 const action = `https://buttondown.com/api/emails/embed-subscribe/${OWNER.buttondownUser}`;
 ---
 
-<section class="newsletter on-dark" id="newsletter">
-	<div class="copy">
-		<h2>{UI.newsletterHeading}</h2>
-		<p>{connected ? UI.newsletterSub : UI.newsletterUnset}</p>
-	</div>
+{
+	NEWSLETTER_ENABLED && (
+		<section class="newsletter on-dark" id="newsletter">
+			<div class="copy">
+				<h2>{UI.newsletterHeading}</h2>
+				<p>{UI.newsletterSub}</p>
+			</div>
 
-	<form class="form" action={action} method="post">
-		<label class="sr-only" for="bd-email">E-Mail-Adresse</label>
-		<input
-			id="bd-email"
-			type="email"
-			name="email"
-			required
-			autocomplete="email"
-			placeholder={UI.emailPlaceholder}
-			disabled={!connected}
-		/>
-		<input type="hidden" name="embed" value="1" />
-		<button type="submit" disabled={!connected}>{UI.subscribe}</button>
-	</form>
-</section>
+			<form class="form" action={action} method="post">
+				<label class="sr-only" for="bd-email">
+					E-Mail-Adresse
+				</label>
+				<input
+					id="bd-email"
+					type="email"
+					name="email"
+					required
+					autocomplete="email"
+					placeholder={UI.emailPlaceholder}
+				/>
+				<input type="hidden" name="embed" value="1" />
+				<button type="submit">{UI.subscribe}</button>
+			</form>
+		</section>
+	)
+}
 
 <style>
 	.newsletter {
@@ -100,15 +104,9 @@ const action = `https://buttondown.com/api/emails/embed-subscribe/${OWNER.button
 		border: 2px solid var(--accent);
 		cursor: pointer;
 	}
-	button:hover:not(:disabled) {
+	button:hover {
 		background: var(--accent-hover);
 		border-color: var(--accent-hover);
-	}
-
-	input:disabled,
-	button:disabled {
-		opacity: 0.45;
-		cursor: not-allowed;
 	}
 
 	.sr-only {

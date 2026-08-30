@@ -29,7 +29,15 @@ export const SITE = {
  * "not ready to publish" banner on the legal pages.
  */
 export const OWNER = {
-	/** Buttondown newsletter username, from your Buttondown dashboard. */
+	/**
+	 * Buttondown newsletter username, from your Buttondown dashboard.
+	 *
+	 * THIS IS THE NEWSLETTER SWITCH. While it is empty the newsletter is dormant:
+	 * no signup block, no SUBSCRIBE button, no Buttondown paragraph in the privacy
+	 * policy. Fill it in and all three come back on the next deploy — nothing else
+	 * to change. (Buttondown's own double opt-in setting still has to be switched
+	 * on in their dashboard; the privacy policy promises it.)
+	 */
 	buttondownUser: '',
 	email: 'sebastian.essling@mindsquare.de',
 	linkedinUrl: 'https://www.linkedin.com/in/sebastian-essling/',
@@ -42,9 +50,12 @@ export const OWNER = {
 	vatId: '',
 } as const;
 
-/** Fields that must be set before publishing. `phone` is deliberately optional. */
+/**
+ * Fields that must be set before publishing. `phone` is deliberately optional,
+ * and `buttondownUser` is not required either — the newsletter is a feature you
+ * may simply not want, not an unfinished field.
+ */
 export const REQUIRED_OWNER_FIELDS = [
-	'buttondownUser',
 	'email',
 	'linkedinUrl',
 	'street',
@@ -59,6 +70,14 @@ export function missingOwnerFields(): string[] {
 export function isPublishReady(): boolean {
 	return missingOwnerFields().length === 0;
 }
+
+/**
+ * The newsletter is dormant until a Buttondown username exists. Everything that
+ * mentions the newsletter — the signup block, the SUBSCRIBE button, the
+ * Buttondown section of the privacy policy — reads this one value, so the
+ * feature can never be half-on.
+ */
+export const NEWSLETTER_ENABLED: boolean = OWNER.buttondownUser.trim() !== '';
 
 export const TOPIC_IDS = ['digitalisierung', 'ki-daten', 'organisation'] as const;
 export type TopicId = (typeof TOPIC_IDS)[number];
@@ -141,7 +160,6 @@ export const UI = {
 	aboutCta: 'ÜBER MICH',
 	newsletterHeading: 'Neue Nuggets per E-Mail.',
 	newsletterSub: 'EIN NUGGET, WENN EINES FERTIG IST. KEIN SPAM. JEDERZEIT ABBESTELLBAR.',
-	newsletterUnset: 'NEWSLETTER NOCH NICHT VERBUNDEN — buttondownUser IN site.ts SETZEN.',
 	emailPlaceholder: 'du@unternehmen.de',
 	minutes: 'MIN',
 	minutesRead: 'MIN LESEZEIT',

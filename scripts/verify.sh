@@ -77,17 +77,43 @@ else
 	fail "CSP would block the newsletter form"
 fi
 
-# RSS/sitemap sanity.
+# The newsletter is one switch (OWNER.buttondownUser). Assert the rendered site
+# actually agrees with it, so the feature can never end up half-on: a signup form
+# without a username, or a privacy policy describing a newsletter that is absent.
+bduser=$(grep -o "buttondownUser: *'[^']*'" src/config/site.ts | sed "s/.*'\(.*\)'/\1/")
+forms=$(grep -rl 'buttondown.com/api' dist --include='*.html' 2>/dev/null | wc -l | tr -d ' ')
+# `|| true` swallows grep's exit-1 on zero matches without appending a second "0".
+privacy=$(grep -c 'Buttondown' dist/datenschutz/index.html 2>/dev/null || true)
+if [ -z "$bduser" ]; then
+	if [ "$forms" -eq 0 ] && [ "$privacy" -eq 0 ]; then
+		pass "newsletter dormant: no signup form, no Buttondown clause"
+	else
+		fail "newsletter is off but still rendered ($forms page(s), privacy mentions: $privacy)"
+	fi
+else
+	if [ "$forms" -gt 0 ] && [ "$privacy" -gt 0 ]; then
+		pass "newsletter live on $forms page(s), privacy policy covers it"
+	else
+		fail "buttondownUser is set but the newsletter did not render ($forms page(s), privacy: $privacy)"
+	fi
+fi
+
+# RSS/sitemap sanity. Zero nuggets is a legitimate state (a blog before its
+# first post), so the assertion is agreement between feed and pages, not a count.
 items=$(grep -o '<item>' dist/rss.xml 2>/dev/null | wc -l | tr -d ' ')
-published=$(find dist/nuggets -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')
-if [ "$items" -eq "$published" ] && [ "$items" -gt 0 ]; then
-	pass "RSS lists all $items published nuggets"
+published=$(find dist/nuggets -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
+if [ "$items" -eq "$published" ]; then
+	if [ "$items" -eq 0 ]; then
+		pass "RSS is valid and empty (no nuggets published yet)"
+	else
+		pass "RSS lists all $items published nuggets"
+	fi
 else
 	fail "RSS has $items items but $published nuggets are built"
 fi
 
-grep -q 'hr-tech-nugget.pages.dev\|https://' dist/rss.xml 2>/dev/null &&
-	pass "RSS uses absolute URLs" || fail "RSS URLs are not absolute"
+grep -q 'https://hr-tech-nugget.org' dist/rss.xml 2>/dev/null &&
+	pass "RSS uses absolute URLs on the real domain" || fail "RSS URLs are not absolute"
 
 [ -f dist/sitemap-index.xml ] && pass "sitemap generated" || fail "no sitemap"
 
