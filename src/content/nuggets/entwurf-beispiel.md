@@ -1,8 +1,8 @@
 ---
-title: 'Entwurf: sollte nirgends erscheinen'
+title: 'Entwurf-Fixture (erscheint nie im Build)'
 dek: 'Diese Fixture prüft, dass Entwürfe aus Build, RSS, Sitemap und allen Zählungen herausfallen.'
 topic: 'organisation'
-published: 2026-08-26
+published: 2026-06-20
 draft: true
 ---
 
