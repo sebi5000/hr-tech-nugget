@@ -1,17 +1,17 @@
 ---
 title: 'Best-of-Suite oder Best-of-Breed für Ihre HR-IT-Landschaft?'
-dek: 'Die Frage entscheidet sich nicht an der Technik, sondern daran, mit welchen HR-Prozessen eine Organisation am Markt einen Unterschied macht.'
+dek: 'Warum die Fragestellung oft zu kurz greift'
 topic: 'digitalisierung'
 published: 2026-09-16
 ---
 
 Vor der Frage „Best-of-Suite oder Best-of-Breed?“ stehen heute zahlreiche Kunden. In Gesprächen mit Personalern, die sich mit Softwareauswahl und der Zukunft ihrer Systeme befassen, ist diese strategische Weichenstellung immer wieder Thema.
 
-## Die entscheidende Frage
+## Kernfrage
 
 Ich frage dann immer: „Mit welchen HR-Prozessen schafft Ihre Organisation einen Unterschied am Markt?“ Für Lieferdienste zum Beispiel sind schnelles Recruiting und Onboarding essenziell, damit die Fahrerflotte immer besetzt und einsatzbereit ist. Wer das beherrscht, hat einen substanziellen Marktvorteil gegenüber anderen Diensten. Im traditionellen Mittelstand sind es vielleicht eher Benefit-Programme, die Mitarbeiter langfristig an die Organisation binden – zum Beispiel eine eigene Kinderbetreuung oder Ähnliches.
 
-## Wann eine Suite reicht
+## Wann eine HR-Suite sinnvoll ist
 
 Gibt es überhaupt nichts, womit eine Organisation mit Exzellenz im HR einen substanziellen Marktvorteil erarbeiten kann, ist wahrscheinlich eine HR-Suite die richtige Wahl. Dann geht es im Wesentlichen um Effizienzsteigerung und Kosteneinsparung. Die Systeme sind Hygienefaktor, aber kein Wertstifter.
 
