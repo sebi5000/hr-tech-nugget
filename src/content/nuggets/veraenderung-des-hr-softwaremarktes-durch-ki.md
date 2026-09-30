@@ -1,5 +1,5 @@
 ---
-title: 'Veränderung des HR-Softwaremarktes durch KI'
+title: 'Wird Software zu Klickware?'
 dek: 'Wenn Software zur Klickware wird, braucht HR eine Strategie mit Leitplanken statt Fünfjahresplänen'
 topic: 'ki-daten'
 published: 2026-09-30
